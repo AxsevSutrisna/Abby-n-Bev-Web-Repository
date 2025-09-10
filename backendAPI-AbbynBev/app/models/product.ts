@@ -1,13 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany, scope } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
-import Tag from './tag.js'
-import SubTag from './sub_tag.js'
-import DetailSubTag from './detail_sub_tag.js'
+import { BaseModel, column, belongsTo, hasMany, scope, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import CategoryType from './category_type.js'
 import ProductVariant from './product_variant.js'
 import ProductDiscount from './product_discount.js'
 import ProductMedia from './product_media.js'
+import Review from './review.js'
+import Tag from './tag.js'
+import Brand from './brand.js'
+import Persona from './persona.js'
+import FlashSale from './flashsale.js'
+import ConcernOption from './concern_option.js'
+import ProfileCategoryOption from './profile_category_option.js'
 
 export default class Product extends BaseModel {
   @column({ isPrimary: true })
@@ -17,46 +21,40 @@ export default class Product extends BaseModel {
   declare name: string
 
   @column()
+  declare slug: string
+
+  @column()
   declare description: string | null
+
+  @column()
+  declare basePrice: number | null
 
   @column()
   declare weight: number
 
   @column()
-  declare basePrice: string | null
-
-  @column()
   declare isFlashsale: boolean
 
   @column()
-  declare sizeChartId: number
-
-  @column()
-  declare tagId: number
-
-  @column()
-  declare subTagId: number
-
-  @column()
-  declare detailSubTagId: number
+  declare status: 'normal' | 'war' | 'draft'
 
   @column()
   declare categoryTypeId: number
 
   @column()
-  declare path: string | null
+  declare brandId: number
 
   @column()
-  declare popularity: number
+  declare personaId: number
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
+  @belongsTo(() => CategoryType)
+  declare categoryType: BelongsTo<typeof CategoryType>
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  @belongsTo(() => Brand)
+  declare brand: BelongsTo<typeof Brand>
 
-  @column.dateTime()
-  declare deletedAt: DateTime | null
+  @belongsTo(() => Persona)
+  declare persona: BelongsTo<typeof Persona>
 
   @column()
   declare metaTitle: string | null
@@ -67,17 +65,14 @@ export default class Product extends BaseModel {
   @column()
   declare metaKeywords: string | null
 
-  @belongsTo(() => Tag)
-  declare tag: BelongsTo<typeof Tag>
+  @column()
+  declare position: number | null
 
-  @belongsTo(() => SubTag)
-  declare subTag: BelongsTo<typeof SubTag>
+  @column()
+  declare popularity: number
 
-  @belongsTo(() => DetailSubTag)
-  declare detailSubTag: BelongsTo<typeof DetailSubTag>
-
-  @belongsTo(() => CategoryType)
-  declare categoryType: BelongsTo<typeof CategoryType>
+  @column()
+  declare path: string | null
 
   @hasMany(() => ProductVariant)
   declare variants: HasMany<typeof ProductVariant>
@@ -88,26 +83,56 @@ export default class Product extends BaseModel {
   @hasMany(() => ProductDiscount)
   declare discounts: HasMany<typeof ProductDiscount>
 
-  @column()
-  declare position: number
+  @hasMany(() => Review)
+  declare reviews: HasMany<typeof Review>
 
-  // Scope untuk mengambil hanya data yang tidak terhapus
+  @manyToMany(() => Tag, {
+    pivotTable: 'product_tags',
+    pivotColumns: ['start_date', 'end_date'],
+  })
+  declare tags: ManyToMany<typeof Tag>
+
+  @hasMany(() => FlashSale)
+  declare flashSales: HasMany<typeof FlashSale>
+
+  @manyToMany(() => ConcernOption, {
+    pivotTable: 'product_concerns',
+  })
+  declare concernOptions: ManyToMany<typeof ConcernOption>
+
+  @manyToMany(() => ProfileCategoryOption, {
+    pivotTable: 'product_category_profiles',
+    pivotForeignKey: 'product_id',
+    pivotRelatedForeignKey: 'profile_category_options_id', // ⬅ pakai plural sesuai migration
+  })
+  declare profileOptions: ManyToMany<typeof ProfileCategoryOption>
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime
+
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+
   public static active = scope((query) => {
     query.whereNull('deleted_at')
   })
 
-  // Scope untuk mengambil hanya data yang sudah dihapus
   public static trashed = scope((query) => {
     query.whereNotNull('deleted_at')
   })
 
-  // Soft delete method
+  public static visible = scope((query) => {
+    query.whereNull('deleted_at').whereIn('status', ['normal', 'war'])
+  })
+
   public async softDelete() {
     this.deletedAt = DateTime.now()
     await this.save()
   }
 
-  // Restore method untuk mengembalikan data yang terhapus
   public async restore() {
     this.deletedAt = null
     await this.save()

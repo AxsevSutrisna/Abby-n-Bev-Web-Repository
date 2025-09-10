@@ -52,7 +52,10 @@ export default class BannersController {
         type: 'image_mobile',
       })
 
-      const totalBanner: Banner | null = await Banner.query().whereNull('deletedAt').count('* as total').first()
+      const totalBanner: Banner | null = await Banner.query()
+        .whereNull('deletedAt')
+        .count('* as total')
+        .first()
       const orderNewBanner: number = (totalBanner?.$extras?.total || 0) + 1
 
       const banner: Banner = await Banner.create({
@@ -226,7 +229,7 @@ export default class BannersController {
         })
       }
 
-      await banner.softDelete()
+      await banner.delete()
 
       // @ts-ignore
       await emitter.emit('set:activity-log', {
