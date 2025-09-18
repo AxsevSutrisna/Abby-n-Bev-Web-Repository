@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, belongsTo, hasMany, scope, manyToMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
+
 import CategoryType from './category_type.js'
 import ProductVariant from './product_variant.js'
 import ProductDiscount from './product_discount.js'
@@ -74,6 +75,9 @@ export default class Product extends BaseModel {
   @column()
   declare path: string | null
 
+  @column()
+  declare masterSku: string | null
+
   @hasMany(() => ProductVariant)
   declare variants: HasMany<typeof ProductVariant>
 
@@ -103,7 +107,7 @@ export default class Product extends BaseModel {
   @manyToMany(() => ProfileCategoryOption, {
     pivotTable: 'product_category_profiles',
     pivotForeignKey: 'product_id',
-    pivotRelatedForeignKey: 'profile_category_options_id', // ⬅ pakai plural sesuai migration
+    pivotRelatedForeignKey: 'profile_category_options_id',
   })
   declare profileOptions: ManyToMany<typeof ProfileCategoryOption>
 
@@ -117,7 +121,7 @@ export default class Product extends BaseModel {
   declare deletedAt: DateTime | null
 
   public static active = scope((query) => {
-    query.whereNull('deleted_at')
+    query.whereNull('products.deleted_at')
   })
 
   public static trashed = scope((query) => {
@@ -125,7 +129,12 @@ export default class Product extends BaseModel {
   })
 
   public static visible = scope((query) => {
-    query.whereNull('deleted_at').whereIn('status', ['normal', 'war'])
+    query
+      .whereNull('deleted_at')
+      .whereIn('status', ['normal', 'war'])
+      .whereHas('variants' as any, (variantQuery) => {
+        variantQuery.where('stock', '>', 0)
+      })
   })
 
   public async softDelete() {

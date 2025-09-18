@@ -34,6 +34,9 @@ const CmsProfileCategoriesController = () =>
 const CmsProfileCategoryOptionsController = () =>
   import('#controllers/cms/profile_category_options_controller')
 const CmsConcernOptionController = () => import('#controllers/cms/concern_options_controller')
+const CmsStockMovementsController = () => import('#controllers/cms/stock_movements_controller')
+const CmsProductOnlinesController = () => import('#controllers/cms/product_onlines_controller')
+const CmsActivityLogsController = () => import('#controllers/cms/activity_logs_controller')
 
 const FeCategoryTypesController = () => import('#controllers/frontend/category_types_controller')
 const FeVoucherController = () => import('#controllers/frontend/vouchers_controller')
@@ -49,6 +52,15 @@ const FeConcernController = () => import('#controllers/frontend/concerns_control
 const FeTransactionCartController = () =>
   import('#controllers/frontend/transaction_carts_controller')
 const FeTagsController = () => import('#controllers/frontend/tags_controller')
+const FeUserBeautyProfilesController = () =>
+  import('#controllers/frontend/user_beauty_profiles_controller')
+const FeProductRecommendationsController = () =>
+  import('#controllers/frontend/product_recommendations_controller')
+const FeTransactionEcommerceController = () =>
+  import('#controllers/frontend/transaction_commerces_controller')
+
+const PosProductsController = () => import('#controllers/pos/products_controller')
+const PosTransactionPosController = () => import('#controllers/pos/transaction_pos_controller')
 
 router
   .group(() => {
@@ -59,6 +71,7 @@ router
     router.post('/auth/login', [AuthController, 'login'])
     router.post('/auth/verify-login', [AuthController, 'verifyLoginOtp'])
     router.post('/auth/login-admin', [AuthController, 'loginAdmin'])
+    router.post('/auth/login-cashier', [AuthController, 'loginCashier'])
 
     router.post('/auth/forgot', [AuthController, 'requestForgotPassword'])
     router
@@ -147,9 +160,20 @@ router
             router.delete('/:id', [ProductController, 'delete'])
             router.get('/is-flashsale/list', [ProductController, 'getIsFlashsale'])
             router.post('/update-order', [ProductController, 'updateProductIndex'])
+            router.post('/:id/publish', [ProductController, 'publish'])
+            router.post('/:id/unpublish', [ProductController, 'unpublish'])
           })
           .use(middleware.roleAdmin())
           .prefix('/product')
+
+        // Product Online Management
+        router
+          .group(() => {
+            router.get('', [CmsProductOnlinesController, 'get'])
+            router.get('/:id', [CmsProductOnlinesController, 'show'])
+          })
+          .use(middleware.roleAdmin())
+          .prefix('/product-online')
 
         // Voucher Management
         router
@@ -305,6 +329,16 @@ router
           .use(middleware.roleAdmin())
           .prefix('/profile-category-options')
 
+        // Stock Movements (Audit Log)
+        router
+          .group(() => {
+            router.get('', [CmsStockMovementsController, 'index'])
+            router.post('/adjust', [CmsStockMovementsController, 'adjust'])
+            router.get('/export', [CmsStockMovementsController, 'export'])
+          })
+          .prefix('/stock-movements')
+          .use(middleware.roleAdmin())
+
         // Transaction Management
         router
           .group(() => {
@@ -319,12 +353,16 @@ router
         router.get('/total-user', [CmsHomeController, 'totalRegisterUser'])
         router.get('/total-register-user-period', [CmsHomeController, 'totalRegisterUserByPeriod'])
         router.get('/user-carts', [CmsHomeController, 'getUserCart'])
+
+        // Activity Logs
+        router
+          .get('/activity-logs', [CmsActivityLogsController, 'index'])
+          .use(middleware.roleAdmin())
       })
       .prefix('/admin')
 
     // User frontend Routes
 
-    // Category Types (frontend)
     // List categories (tree structure)
     router.get('/category-types', [FeCategoryTypesController, 'list'])
     router.get('/category-types/:slug', [FeCategoryTypesController, 'show'])
@@ -398,6 +436,19 @@ router
     router.get('/tags', [FeTagsController, 'list'])
     router.get('/tags/:slug', [FeTagsController, 'show'])
 
+    // Personalized Product Recommendations
+    router
+      .group(() => {
+        // Beauty Concern & Profile
+        router.get('/beauty', [FeUserBeautyProfilesController, 'getUserSelections'])
+        router.post('/beauty/concerns', [FeUserBeautyProfilesController, 'saveConcerns'])
+        router.post('/beauty/profiles', [FeUserBeautyProfilesController, 'saveProfiles'])
+
+        // Product Recommendations
+        router.get('/recommendations', [FeProductRecommendationsController, 'getRecommendations'])
+      })
+      .use(middleware.auth({ guards: ['api'] }))
+
     // Home
     router.get('/banners', [FeHomeController, 'banner'])
     router.get('/tnc', [FeHomeController, 'getTermAndCondition'])
@@ -408,6 +459,7 @@ router
     router.get('/about-us', [FeHomeController, 'getAboutUs'])
     router.get('/flashsale', [FeHomeController, 'flashSale'])
 
+    // User Cart
     router
       .group(() => {
         router.get('/cart', [FeTransactionCartController, 'get'])
@@ -418,5 +470,29 @@ router
         router.delete('/cart', [FeTransactionCartController, 'delete'])
       })
       .use(middleware.auth({ guards: ['api'] }))
+
+    router
+      .group(() => {
+        router.get('/transaction', [FeTransactionEcommerceController, 'get'])
+        router.post('/transaction', [FeTransactionEcommerceController, 'create'])
+        router.put('/transaction/status', [FeTransactionEcommerceController, 'updateStatus'])
+      })
+      .use(middleware.auth({ guards: ['api'] }))
+
+    router.post('/transaction/retrieve', [
+      FeTransactionEcommerceController,
+      'getByTransactionNumber',
+    ])
+    router.post('/midtrans/callback', [FeTransactionEcommerceController, 'webhookMidtrans'])
+
+    // POS Cashier Routes
+    // Scan barcode to get product
+    router
+      .group(() => {
+        router.post('/scan-barcode', [PosProductsController, 'scanByBarcode'])
+        router.post('/transactions', [PosTransactionPosController, 'store'])
+      })
+      .prefix('/pos')
+      .use(middleware.roleCashier())
   })
   .prefix('/api/v1')
