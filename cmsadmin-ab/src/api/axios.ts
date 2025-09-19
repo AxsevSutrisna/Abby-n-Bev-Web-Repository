@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -6,34 +6,34 @@ const api = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-})
+});
 
 // Attach token ke setiap request
 api.interceptors.request.use((config) => {
-  const session = localStorage.getItem("session")
+  const session = localStorage.getItem("session");
   if (session) {
     try {
-      const { token } = JSON.parse(session)
+      const { token } = JSON.parse(session);
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+        config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (e) {
-      console.error("Invalid session format:", e)
+      console.error("Invalid session format:", e);
     }
   }
-  return config
-})
+  return config;
+});
 
 // Handle 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("session")
-      window.location.href = "/login"
+      localStorage.removeItem("session");
+      window.location.href = "/login";
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
-export default api
+export default api;
