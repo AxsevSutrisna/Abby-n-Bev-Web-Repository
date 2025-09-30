@@ -214,7 +214,8 @@ export default class AuthController {
             .subject('[Abby n Bev] OTP Verification')
             .htmlView('emails/otp', {
               otp,
-              email: user.email,
+              name: user.name,
+              currentYear: new Date().getFullYear(),
             })
         })
       } else {
@@ -771,7 +772,7 @@ export default class AuthController {
       })
       const googlePayload = ticket.getPayload()
 
-      const email = googlePayload?.email
+      const email = googlePayload?.email?.toLowerCase()
       const name = googlePayload?.name
       const googleId = googlePayload?.sub
 
