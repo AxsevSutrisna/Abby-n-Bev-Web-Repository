@@ -18,8 +18,6 @@ export function FormLogin() {
     try {
       setLoading(true)
       const res = await api.post("/auth/login-admin", values)
-
-      // cek response backend
       if (res && (res.data?.serve || res.data?.token)) {
         const sessionData = res.data.serve || res.data
         localStorage.setItem("session", JSON.stringify(sessionData))

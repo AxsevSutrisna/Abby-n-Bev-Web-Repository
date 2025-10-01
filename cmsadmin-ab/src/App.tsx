@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import LoginPage from "./pages/LoginPage"
 import DashboardPage from "./pages/DashboardPage"
-import ProtectedRoute from "./routes/ProtectedRoutes"
+import ProtectedRoute from "./apps/ProtectedRoutes"
 
 export default function App() {
   return (
