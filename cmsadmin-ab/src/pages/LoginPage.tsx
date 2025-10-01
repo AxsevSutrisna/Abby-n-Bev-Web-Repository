@@ -9,18 +9,22 @@ function LoginPage() {
           display: "flex",
           alignItems: "center",
           gap: 10,
-          marginBottom: 20,
+          marginBottom: 30,
+          justifyContent: "center",
         }}
       >
-        <img src="/logo.png" alt="Icon" style={{ width: 30, height: "auto" }} />
+        <img
+          src="/logoAbbyCombine.svg"
+          alt="Icon"
+          style={{ width: 140, height: "auto" }}
+        />
         <div
           style={{
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: "bold",
             color: "var(--ant-primary-color)",
           }}
         >
-          Abby n Bev
         </div>
       </div>
 
@@ -28,6 +32,8 @@ function LoginPage() {
         style={{
           fontSize: 20,
           fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 10,
         }}
       >
         Sign In to your account
@@ -38,6 +44,7 @@ function LoginPage() {
           fontSize: 12,
           color: "#404040",
           marginBottom: 20,
+          textAlign: "center",
         }}
       >
         Welcome back! Please sign in with the account you’ve registered

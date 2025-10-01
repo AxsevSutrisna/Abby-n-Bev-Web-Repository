@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Form, Input, Button } from "antd"
 import { ArrowRightOutlined } from "@ant-design/icons"
-import api from "../../../api/axios"
+import api from "../../../api/http"
 
 interface LoginValues {
   email: string
@@ -17,10 +17,7 @@ export function FormLogin() {
   const onFinish = async (values: LoginValues) => {
     try {
       setLoading(true)
-      // ✅ perbaikan endpoint
       const res = await api.post("/auth/login-admin", values)
-
-      // cek response backend
       if (res && (res.data?.serve || res.data?.token)) {
         const sessionData = res.data.serve || res.data
         localStorage.setItem("session", JSON.stringify(sessionData))
