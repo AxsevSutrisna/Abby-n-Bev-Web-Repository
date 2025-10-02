@@ -29,7 +29,6 @@ export const stylesPaySlip = StyleSheet.create({
     textAlign: "center",
     marginBottom: 5,
   },
-  // 👇 Perbaikan di sini
   tableEmployee: {
     width: "auto",
     borderStyle: "solid",

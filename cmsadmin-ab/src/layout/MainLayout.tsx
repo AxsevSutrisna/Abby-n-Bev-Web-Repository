@@ -86,10 +86,10 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
         style={{ overflowY: "auto", height: window.innerHeight }}
       >
         <div className="logo" style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "center" }}>
-          <img src={collapsed ? "favicon.png" : "/logo.png"} alt="Logo" />
+          <img src={collapsed ? "favicon.png" : "/logoAbby.svg"} alt="Logo" />
           {!collapsed && (
             <div style={{ fontWeight: "bold", textAlign: "left" }}>
-              POV <br />
+              Abby <br />
               <span style={{ fontSize: 10, fontWeight: "normal", color: "#8c8c8c" }}>E-Commerce</span>
             </div>
           )}
@@ -190,7 +190,7 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
                             },
                           },
                           onOk: () => {
-                            http.post("/v1/auth/logout").then((res) => {
+                            http.post("/auth/logout").then((res) => {
                               if (res) {
                                 localStorage.removeItem("session");
                                 window.location.reload();
@@ -253,8 +253,7 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
               paddingBottom: 20,
             }}
           >
-            Copyright &copy;{new Date().getFullYear()} POV E-Commerce | All
-            Right Reserved
+            Copyright &copy;{new Date().getFullYear()} CV. Gaya Beauty Utama | All Rights Reserved.
           </div>
         </Content>
 

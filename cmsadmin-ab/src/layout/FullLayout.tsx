@@ -43,12 +43,12 @@ const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
             </div>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "left" }}>
             <img
               src={loginLeft}
               alt="Illustration"
               style={{
-                width: "90%",
+                width: "80%",
                 height: "auto",
                 objectFit: "contain",
               }}

@@ -1,25 +1,23 @@
+import React from "react"
 import FullLayout from "../layout/FullLayout"
-import { FormLogin } from "../components/Forms/Auth/FormLogin"
+import { FormForgot } from "../components/Forms/Auth/FormForgot"
 
-function LoginPage() {
+const ForgotPage: React.FC = () => {
   return (
     <FullLayout>
+      {/* Logo & Brand */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
           gap: 10,
-          marginBottom: 30,
+          marginBottom: 20,
         }}
       >
-        <img
-          src="/logoAbbyCombine.svg"
-          alt="Icon"
-          style={{ width: 140, height: "auto" }}
-        />
+        <img src="/logoAbbyCombine.svg" alt="Icon" style={{ width: 140, height: "auto" }} />
         <div
           style={{
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: "bold",
             color: "var(--ant-primary-color)",
           }}
@@ -27,6 +25,7 @@ function LoginPage() {
         </div>
       </div>
 
+      {/* Heading */}
       <div
         style={{
           fontSize: 20,
@@ -34,9 +33,10 @@ function LoginPage() {
           marginBottom: 10,
         }}
       >
-        Sign In to your account
+        Forgot Password
       </div>
 
+      {/* Subheading */}
       <div
         style={{
           fontSize: 12,
@@ -44,12 +44,19 @@ function LoginPage() {
           marginBottom: 20,
         }}
       >
-        Welcome back! Please sign in with the account you’ve registered
+        Please fill in your registered email to send a password update link.
+        <br />
+        Back to login{" "}
+        <a style={{ fontWeight: "bold" }} href="/login">
+          here
+        </a>
+        .
       </div>
 
-      <FormLogin />
+      {/* Form */}
+      <FormForgot />
     </FullLayout>
   )
 }
 
-export default LoginPage
+export default ForgotPage

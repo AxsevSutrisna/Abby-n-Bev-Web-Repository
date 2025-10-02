@@ -8,7 +8,11 @@ interface FormValues {
   name: string;
 }
 
-const FormProfile: FC = () => {
+interface FormProfileProps {
+  handleClose: () => void; 
+}
+
+const FormProfile: FC<FormProfileProps> = ({ handleClose }) => {
   const [form] = Form.useForm<FormValues>();
 
   const onFinish = async (values: FormValues) => {
@@ -18,13 +22,14 @@ const FormProfile: FC = () => {
     values.id = storage.user.id;
 
     try {
-      const res = await http.put("/user", values);
+      const res = await http.put("/users", values);
 
       if (res?.data?.serve?.name) {
         storage.user.name = res.data.serve.name;
         localStorage.setItem("session", JSON.stringify(storage));
         window.location.reload();
       }
+      handleClose();
     } catch (error) {
       console.error("Update profile failed:", error);
     }
