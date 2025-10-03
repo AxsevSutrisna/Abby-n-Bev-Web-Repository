@@ -4,8 +4,8 @@ import type { ColumnsType } from "antd/es/table";
 import MainLayout from "../layout/MainLayout";
 import useIsMobile from "../utils/responsive";
 import dashboardShape from "../assets/img/dashboard-shape.svg";
-import http from "../api/http"
-import history from "../utils/history";
+import http from "../api/http";
+import { useNavigate } from "react-router-dom"; // ✅ v6 navigation
 import TransactionChart from "../components/Charts/TransactionChart";
 import RegisterUserPeriodChart from "../components/Charts/RegisterUserPeriodChart";
 import TableUserCart from "../components/Tables/Dashboard/TableUserCart";
@@ -30,6 +30,8 @@ interface TotalResponse {
 
 const DashboardPage: React.FC = () => {
   const isMobile = useIsMobile();
+  const navigate = useNavigate(); // ✅ gunakan hook v6
+
   const [topProducts, setTopProducts] = useState<ProductTable[]>([]);
   const [leastProducts, setLeastProducts] = useState<ProductTable[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,6 +48,7 @@ const DashboardPage: React.FC = () => {
     fetchTotalUsers();
     fetchTotalTransactionMonth();
     fetchTotalTransaction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTopProducts = async () => {
@@ -62,6 +65,8 @@ const DashboardPage: React.FC = () => {
           })
         );
         setTopProducts(formattedData);
+      } else {
+        setTopProducts([]);
       }
     } catch (error) {
       console.error("Error fetching top products:", error);
@@ -83,6 +88,8 @@ const DashboardPage: React.FC = () => {
           })
         );
         setLeastProducts(formattedData);
+      } else {
+        setLeastProducts([]);
       }
     } catch (error) {
       console.error("Error fetching less products:", error);
@@ -96,6 +103,8 @@ const DashboardPage: React.FC = () => {
       const response = await http.get("/admin/total-user");
       if (response?.data?.serve) {
         setTotalUsers(response.data.serve);
+      } else {
+        setTotalUsers({ total: 0 });
       }
     } catch (error) {
       console.error("Error fetching total users:", error);
@@ -109,6 +118,8 @@ const DashboardPage: React.FC = () => {
       );
       if (response?.data?.serve) {
         setTotalTransactionMonth(response.data.serve);
+      } else {
+        setTotalTransactionMonth({ total: 0 });
       }
     } catch (error) {
       console.error("Error fetching total transaction month:", error);
@@ -120,6 +131,8 @@ const DashboardPage: React.FC = () => {
       const response = await http.get(`/admin/total-transaction`);
       if (response?.data?.serve) {
         setTotalTransaction(response.data.serve);
+      } else {
+        setTotalTransaction({ total: 0 });
       }
     } catch (error) {
       console.error("Error fetching total transaction:", error);
@@ -142,7 +155,7 @@ const DashboardPage: React.FC = () => {
         <Button
           type="link"
           style={{ padding: 0 }}
-          onClick={() => history.push(`/product-form?id=${record.key}`)}
+          onClick={() => navigate(`/product-form?id=${record.key}`)} // ✅ ganti history.push
         >
           {text}
         </Button>
@@ -228,6 +241,7 @@ const DashboardPage: React.FC = () => {
             />
           </Card>
         </Col>
+
         <Col xs={24} lg={12}>
           <Card title="Least Selling Products" style={{ height: "100%" }}>
             <Table<ProductTable>

@@ -1,10 +1,10 @@
-import React, { type ReactNode } from "react"
-import { Card } from "antd"
-import loginLeft from "../assets/img/login-left.png"
-import "./FullLayout.css"
+import React, { type ReactNode } from "react";
+import { Card } from "antd";
+import loginLeft from "../assets/img/login-left.png";
+import "./FullLayout.css";
 
 interface FullLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
@@ -36,10 +36,10 @@ const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
               Welcome to <br /> Abby n Bev Admin Panel
             </div>
             <div style={{ fontSize: 14, lineHeight: 1.5, maxWidth: "80%" }}>
-              Admin panel e-commerce adalah pusat kontrol bagi pengelola untuk
-              mengelola produk, pesanan, pelanggan, dan analisis penjualan.
-              Platform ini menyediakan alat lengkap untuk mengoptimalkan dan
-              memantau operasional toko online secara efisien.
+              Admin panel e-commerce adalah pusat kontrol bagi pengelola
+              untuk mengelola produk, pesanan, pelanggan, dan analisis
+              penjualan. Platform ini menyediakan alat lengkap untuk
+              mengoptimalkan dan memantau operasional toko online secara efisien.
             </div>
           </div>
 
@@ -47,11 +47,7 @@ const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
             <img
               src={loginLeft}
               alt="Illustration"
-              style={{
-                width: "80%",
-                height: "auto",
-                objectFit: "contain",
-              }}
+              style={{ width: "80%", height: "auto", objectFit: "contain" }}
             />
           </div>
         </div>
@@ -75,15 +71,13 @@ const FullLayout: React.FC<FullLayoutProps> = ({ children }) => {
             boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
             borderRadius: 12,
           }}
-          bodyStyle={{
-            padding: "40px 30px",
-          }}
+          bodyStyle={{ padding: "40px 30px" }}
         >
           {children}
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FullLayout
+export default FullLayout;
