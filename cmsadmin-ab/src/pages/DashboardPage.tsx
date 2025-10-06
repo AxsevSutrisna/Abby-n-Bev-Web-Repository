@@ -5,7 +5,7 @@ import MainLayout from "../layout/MainLayout";
 import useIsMobile from "../utils/responsive";
 import dashboardShape from "../assets/img/dashboard-shape.svg";
 import http from "../api/http";
-import { useNavigate } from "react-router-dom"; // ✅ v6 navigation
+import { useNavigate } from "react-router-dom";
 import TransactionChart from "../components/Charts/TransactionChart";
 import RegisterUserPeriodChart from "../components/Charts/RegisterUserPeriodChart";
 import TableUserCart from "../components/Tables/Dashboard/TableUserCart";
@@ -155,7 +155,7 @@ const DashboardPage: React.FC = () => {
         <Button
           type="link"
           style={{ padding: 0 }}
-          onClick={() => navigate(`/product-form?id=${record.key}`)} // ✅ ganti history.push
+          onClick={() => navigate(`/product-form?id=${record.key}`)}
         >
           {text}
         </Button>

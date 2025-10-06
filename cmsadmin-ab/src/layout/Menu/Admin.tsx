@@ -1,18 +1,12 @@
 import {
   PieChartOutlined,
-  TagOutlined,
   TagsOutlined,
-  VideoCameraAddOutlined,
-  VideoCameraOutlined,
   GiftOutlined,
   RadiusSettingOutlined,
   ProductOutlined,
-  NumberOutlined,
   PicLeftOutlined,
   PicCenterOutlined,
   FileUnknownOutlined,
-  TeamOutlined,
-  InfoCircleOutlined,
   UndoOutlined,
   SafetyOutlined,
   UsergroupAddOutlined,
@@ -20,6 +14,16 @@ import {
   ShoppingCartOutlined,
   SettingOutlined,
   ThunderboltOutlined,
+  DatabaseOutlined,
+  StockOutlined,
+  ProfileOutlined,
+  ApartmentOutlined,
+  SortAscendingOutlined,
+  LikeOutlined,
+  SwitcherOutlined,
+  PhoneOutlined,
+  WarningOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import helper from "../../utils/helper";
@@ -51,7 +55,6 @@ const MenuAdmin = (level: RoleEnumType): MenuProps["items"] => {
         label: "Customer",
       },
 
-      // Product group (Gudang/Media)
       helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG, helper.RoleEnum.MEDIA]) && {
         key: "#product",
         label: "Product",
@@ -64,40 +67,112 @@ const MenuAdmin = (level: RoleEnumType): MenuProps["items"] => {
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
             key: "/inventory-product",
-            icon: <TagsOutlined />,
+            icon: <DatabaseOutlined />,
             label: "Inventory",
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
-            key: "/category-types",
-            icon: <TagOutlined />,
-            label: "Category Types",
+            key: "/stock-movement",
+            icon: <StockOutlined />,
+            label: "Stock Movement",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/flash-sale",
+            icon: <ThunderboltOutlined />,
+            label: "Flash Sale",
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
             key: "/brand-product",
-            icon: <TagOutlined />,
+            icon: <SortAscendingOutlined />,
             label: "Brand",
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
             key: "/persona-product",
-            icon: <TagOutlined />,
+            icon: <SwitcherOutlined />,
             label: "Persona",
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG, helper.RoleEnum.MEDIA]) && {
             key: "/tag-product",
             label: "Tag",
-            icon: <NumberOutlined />,
+            icon: <TagsOutlined />,
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
-            key: "/size-product",
-            icon: <RadiusSettingOutlined />,
-            label: "Size Chart",
+            key: "/category-types",
+            icon: <ApartmentOutlined />,
+            label: "Category Types",
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
-            key: "/war-products",
-            icon: <ThunderboltOutlined />,
-            label: "War Product",
+            key: "/concern-category",
+            icon: <LikeOutlined />,
+            label: "Concern Category",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/profile-category",
+            icon: <ProfileOutlined />,
+            label: "Profile Category",
           },
         ].filter(Boolean) as MenuProps["items"],
+      },
+      helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+      key: "/voucher",
+      icon: <GiftOutlined />,
+      label: "Voucher",
+      },
+      helper.hasAnyPermission(level, [helper.RoleEnum.ADMINISTRATOR]) && {
+      key: "/transactions",
+      icon: <ShoppingCartOutlined />,
+      label: "Transaction",
+      },
+      helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG, helper.RoleEnum.MEDIA]) && {
+        key: "#content-manager",
+        label: "Content Manager",
+        icon: <PicLeftOutlined />,
+        children: [
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/banners",
+            icon: <PicCenterOutlined />,
+            label: "Banner",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/faqs",
+            icon: <FileUnknownOutlined />,
+            label: "FAQ",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/tnc",
+            icon: <WarningOutlined />,
+            label: "Terms & Conditions ",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/privacy-policy",
+            icon: <SafetyOutlined />,
+            label: "Privacy Policy",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/return-policy",
+            icon: <UndoOutlined />,
+            label: "Return Policy",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/contact-us",
+            icon: <PhoneOutlined />,
+            label: "Contact Us",
+          },
+          helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+            key: "/about-us",
+            icon: <ExclamationCircleOutlined />,
+            label: "About Us",
+          },
+        ].filter(Boolean) as MenuProps["items"],
+      },
+      helper.hasAnyPermission(level, [helper.RoleEnum.ADMINISTRATOR]) && {
+      key: "/activity-logs",
+      icon: <RadiusSettingOutlined />,
+      label: "Activity Log",
+      },
+      helper.hasAnyPermission(level, [helper.RoleEnum.ADMINISTRATOR]) && {
+        key: "/settings",
+        icon: <SettingOutlined />,
+        label: "Settings",
       },
     ].filter(Boolean) as MenuProps["items"]
   );
