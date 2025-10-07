@@ -90,7 +90,7 @@ const columns = (props: ColumnsCtx): ColumnsType<TagRecord> => [
           okText="Yes"
           cancelText="No"
         >
-          <Button type="primary" danger icon={<DeleteOutlined />}>
+          <Button danger icon={<DeleteOutlined />}>
             Delete
           </Button>
         </Popconfirm>

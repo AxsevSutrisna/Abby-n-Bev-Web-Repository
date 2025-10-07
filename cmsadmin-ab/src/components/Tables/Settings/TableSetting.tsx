@@ -1,25 +1,26 @@
-// src/components/Tables/FAQ/TableFaq.tsx
+// src/components/Tables/Settings/TableSetting.tsx
 import React from "react";
 import {
   Table,
   Button,
   Input,
   Card,
-  Popconfirm,
   Select,
   Modal,
   Space,
+  message,
 } from "antd";
 import type { ColumnsType, TablePaginationConfig, TableProps } from "antd/es/table";
-import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import FormFAQ from "../../Forms/Faq/FormFaq";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import http from "../../../api/http";
+import FormSetting from "../../Forms/Settings/FormSetting";
 
-/** ===== Types ===== */
-type FAQRecord = {
+/** ========= Types ========= */
+type SettingRecord = {
   id: number | string;
-  question: string;
-  answer: string;
+  key: string;
+  group: string;
+  value: string;
 };
 
 type QueryParams = {
@@ -30,7 +31,7 @@ type ServePayload = {
   currentPage: string | number;
   perPage: string | number;
   total: string | number;
-  data: FAQRecord[];
+  data: SettingRecord[];
 };
 
 type ListResponse = {
@@ -40,27 +41,22 @@ type ListResponse = {
 };
 
 type ColumnsCtx = {
-  fetch: () => void;
   setOpen: (open: boolean) => void;
-  setCurrent: (rec: FAQRecord | false) => void;
+  setCurrent: (rec: SettingRecord | false) => void;
+  fetch: () => void;
 };
 
-/** ===== Columns ===== */
-const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
-  {
-    title: "Question",
-    dataIndex: "question",
-  },
-  {
-    title: "Answer",
-    dataIndex: "answer",
-  },
+/** ========= Columns ========= */
+const buildColumns = (ctx: ColumnsCtx): ColumnsType<SettingRecord> => [
+  { title: "Key", dataIndex: "key" },
+  { title: "Group", dataIndex: "group" },
+  { title: "Value", dataIndex: "value" },
   {
     title: "#",
     width: "10%",
     align: "center",
     dataIndex: "action",
-    render: (_: unknown, record: FAQRecord) => (
+    render: (_: unknown, record) => (
       <div
         style={{
           display: "flex",
@@ -74,38 +70,20 @@ const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
           key="/edit"
           icon={<EditOutlined />}
           onClick={() => {
-            props.setCurrent(record);
-            props.setOpen(true);
+            ctx.setCurrent(record);
+            ctx.setOpen(true);
           }}
         >
           Edit
         </Button>
-
-        <Popconfirm
-          placement="left"
-          title="Are your sure want delete this data?"
-          onConfirm={async () => {
-            await http({
-              url: `/admin/faq/${record.id}`,
-              method: "DELETE",
-            });
-            props.fetch();
-          }}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button danger icon={<DeleteOutlined />}>
-            Delete
-          </Button>
-        </Popconfirm>
       </div>
     ),
   },
 ];
 
-/** ===== Table Component ===== */
-const TableFaq: React.FC = () => {
-  const [data, setData] = React.useState<FAQRecord[]>([]);
+/** ========= Component ========= */
+const TableSetting: React.FC = () => {
+  const [data, setData] = React.useState<SettingRecord[]>([]);
   const [params, setParams] = React.useState<QueryParams>({ name: "" });
   const [pagination, setPagination] = React.useState<TablePaginationConfig>({
     current: 1,
@@ -113,8 +91,9 @@ const TableFaq: React.FC = () => {
     total: 0,
   });
   const [open, setOpen] = React.useState<boolean>(false);
-  const [current, setCurrent] = React.useState<FAQRecord | false>(false);
+  const [current, setCurrent] = React.useState<SettingRecord | false>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+
   const { Search } = Input;
 
   React.useEffect(() => {
@@ -122,7 +101,7 @@ const TableFaq: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleTableChange: TableProps<FAQRecord>["onChange"] = (page) => {
+  const handleTableChange: TableProps<SettingRecord>["onChange"] = (page) => {
     fetchList(params, page as TablePaginationConfig);
   };
 
@@ -133,7 +112,7 @@ const TableFaq: React.FC = () => {
     setLoading(true);
     try {
       const resp = (await http.get(
-        `/admin/faq?name=${q.name ?? ""}&page=${
+        `/admin/settings?name=${q.name ?? ""}&page=${
           page?.current ?? pagination.current
         }&per_page=${page?.pageSize ?? pagination.pageSize}`
       )) as ListResponse;
@@ -147,6 +126,9 @@ const TableFaq: React.FC = () => {
           total: Number(serve.total),
         });
       }
+    } catch (e) {
+      console.error(e);
+      message.error("Failed to load settings.");
     } finally {
       setLoading(false);
     }
@@ -182,10 +164,8 @@ const TableFaq: React.FC = () => {
             />
             <span style={{ fontSize: 12 }}>entries</span>
           </div>
-          <Space
-            style={{ marginLeft: "auto" }}
-            className="flex align-center mt-2"
-          >
+
+          <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
               placeholder="Search data"
               onSearch={(val) => {
@@ -197,7 +177,10 @@ const TableFaq: React.FC = () => {
             <Button
               icon={<PlusOutlined />}
               type="primary"
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                setCurrent(false); // create mode
+                setOpen(true);
+              }}
             >
               Create New
             </Button>
@@ -205,9 +188,9 @@ const TableFaq: React.FC = () => {
         </div>
       </Card>
 
-      <Table<FAQRecord>
+      <Table<SettingRecord>
         style={{ marginTop: 10 }}
-        columns={columns({
+        columns={buildColumns({
           fetch: () => fetchList(params, pagination),
           setOpen: (v) => setOpen(v),
           setCurrent: (v) => setCurrent(v),
@@ -222,15 +205,16 @@ const TableFaq: React.FC = () => {
       <Modal
         centered
         open={open}
-        title="Manage FAQ"
+        title="Manage Setting"
         onCancel={async () => {
           setOpen(false);
           setCurrent(false);
           fetchList(params, pagination);
         }}
         footer={null}
+        destroyOnClose
       >
-        <FormFAQ
+        <FormSetting
           data={current || undefined}
           handleClose={() => {
             setOpen(false);
@@ -244,4 +228,4 @@ const TableFaq: React.FC = () => {
   );
 };
 
-export default TableFaq;
+export default TableSetting;

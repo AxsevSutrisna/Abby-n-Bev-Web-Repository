@@ -1,4 +1,3 @@
-// src/components/Tables/FAQ/TableFaq.tsx
 import React from "react";
 import {
   Table,
@@ -9,28 +8,38 @@ import {
   Select,
   Modal,
   Space,
+  Tag,
+  message,
 } from "antd";
 import type { ColumnsType, TablePaginationConfig, TableProps } from "antd/es/table";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import FormFAQ from "../../Forms/Faq/FormFaq";
 import http from "../../../api/http";
+import FormBrand from "../../Forms/Brand/FormBrand";
 
-/** ===== Types ===== */
-type FAQRecord = {
+export type BrandPayload = {
+  name: string;
+  description?: string | null;
+  logoUrl?: string | null;
+  bannerUrl?: string | null;
+  country?: string | null;
+  website?: string | null;
+  isActive?: number;
+};
+
+export type BrandRecord = BrandPayload & {
   id: number | string;
-  question: string;
-  answer: string;
+  slug: string;
 };
 
 type QueryParams = {
-  name?: string;
+  q?: string;
 };
 
 type ServePayload = {
   currentPage: string | number;
   perPage: string | number;
   total: string | number;
-  data: FAQRecord[];
+  data: BrandRecord[];
 };
 
 type ListResponse = {
@@ -40,38 +49,51 @@ type ListResponse = {
 };
 
 type ColumnsCtx = {
-  fetch: () => void;
   setOpen: (open: boolean) => void;
-  setCurrent: (rec: FAQRecord | false) => void;
+  setCurrent: (rec: BrandRecord | false) => void;
+  fetch: () => void;
 };
 
-/** ===== Columns ===== */
-const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
+const columns = (props: ColumnsCtx): ColumnsType<BrandRecord> => [
   {
-    title: "Question",
-    dataIndex: "question",
+    title: "Name",
+    dataIndex: "name",
   },
   {
-    title: "Answer",
-    dataIndex: "answer",
+    title: "Country",
+    dataIndex: "country",
+    render: (v?: string | null) => v ?? "-",
+    responsive: ["md"],
+  },
+  {
+    title: "Website",
+    dataIndex: "website",
+    render: (v?: string | null) =>
+      v ? (
+        <a href={v} target="_blank" rel="noreferrer">
+          {v}
+        </a>
+      ) : (
+        "-"
+      ),
+    responsive: ["lg"],
+  },
+  {
+    title: "Status",
+    dataIndex: "isActive",
+    render: (val?: number) =>
+      val === 1 ? <Tag color="blue">ACTIVE</Tag> : <Tag color="red">INACTIVE</Tag>,
+    align: "center",
+    width: 140,
   },
   {
     title: "#",
-    width: "10%",
+    width: 220,
     align: "center",
-    dataIndex: "action",
-    render: (_: unknown, record: FAQRecord) => (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
+    render: (_: unknown, record) => (
+      <Space>
         <Button
           type="primary"
-          key="/edit"
           icon={<EditOutlined />}
           onClick={() => {
             props.setCurrent(record);
@@ -83,37 +105,38 @@ const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
 
         <Popconfirm
           placement="left"
-          title="Are your sure want delete this data?"
-          onConfirm={async () => {
-            await http({
-              url: `/admin/faq/${record.id}`,
-              method: "DELETE",
-            });
-            props.fetch();
-          }}
+          title="Are you sure want to delete this brand?"
           okText="Yes"
           cancelText="No"
+          onConfirm={async () => {
+            try {
+              await http.delete(`/admin/brands/${record.slug}`);
+              message.success("Brand deleted");
+              props.fetch();
+            } catch (err: any) {
+              message.error(err?.response?.data?.message || "Delete failed");
+            }
+          }}
         >
           <Button danger icon={<DeleteOutlined />}>
             Delete
           </Button>
         </Popconfirm>
-      </div>
+      </Space>
     ),
   },
 ];
 
-/** ===== Table Component ===== */
-const TableFaq: React.FC = () => {
-  const [data, setData] = React.useState<FAQRecord[]>([]);
-  const [params, setParams] = React.useState<QueryParams>({ name: "" });
+const TableBrand: React.FC = () => {
+  const [data, setData] = React.useState<BrandRecord[]>([]);
+  const [params, setParams] = React.useState<QueryParams>({ q: "" });
   const [pagination, setPagination] = React.useState<TablePaginationConfig>({
     current: 1,
     pageSize: 10,
     total: 0,
   });
   const [open, setOpen] = React.useState<boolean>(false);
-  const [current, setCurrent] = React.useState<FAQRecord | false>(false);
+  const [current, setCurrent] = React.useState<BrandRecord | false>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
   const { Search } = Input;
 
@@ -122,7 +145,7 @@ const TableFaq: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleTableChange: TableProps<FAQRecord>["onChange"] = (page) => {
+  const handleTableChange: TableProps<BrandRecord>["onChange"] = (page) => {
     fetchList(params, page as TablePaginationConfig);
   };
 
@@ -133,9 +156,9 @@ const TableFaq: React.FC = () => {
     setLoading(true);
     try {
       const resp = (await http.get(
-        `/admin/faq?name=${q.name ?? ""}&page=${
-          page?.current ?? pagination.current
-        }&per_page=${page?.pageSize ?? pagination.pageSize}`
+        `/admin/brands?page=${page?.current ?? pagination.current}&per_page=${
+          page?.pageSize ?? pagination.pageSize
+        }&q=${encodeURIComponent(q.q ?? "")}`
       )) as ListResponse;
 
       const serve = resp?.data?.serve;
@@ -182,14 +205,12 @@ const TableFaq: React.FC = () => {
             />
             <span style={{ fontSize: 12 }}>entries</span>
           </div>
-          <Space
-            style={{ marginLeft: "auto" }}
-            className="flex align-center mt-2"
-          >
+
+          <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search data"
+              placeholder="Search brand"
               onSearch={(val) => {
-                const next: QueryParams = { name: val };
+                const next: QueryParams = { q: val };
                 setParams(next);
                 fetchList(next, pagination);
               }}
@@ -197,7 +218,10 @@ const TableFaq: React.FC = () => {
             <Button
               icon={<PlusOutlined />}
               type="primary"
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                setCurrent(false);
+                setOpen(true);
+              }}
             >
               Create New
             </Button>
@@ -205,12 +229,12 @@ const TableFaq: React.FC = () => {
         </div>
       </Card>
 
-      <Table<FAQRecord>
+      <Table<BrandRecord>
         style={{ marginTop: 10 }}
         columns={columns({
-          fetch: () => fetchList(params, pagination),
           setOpen: (v) => setOpen(v),
           setCurrent: (v) => setCurrent(v),
+          fetch: () => fetchList(params, pagination),
         })}
         rowKey={(record) => String(record.id)}
         dataSource={data}
@@ -222,15 +246,15 @@ const TableFaq: React.FC = () => {
       <Modal
         centered
         open={open}
-        title="Manage FAQ"
-        onCancel={async () => {
+        title={current ? "Edit Brand" : "Create Brand"}
+        onCancel={() => {
           setOpen(false);
           setCurrent(false);
-          fetchList(params, pagination);
         }}
         footer={null}
+        destroyOnClose
       >
-        <FormFAQ
+        <FormBrand
           data={current || undefined}
           handleClose={() => {
             setOpen(false);
@@ -244,4 +268,4 @@ const TableFaq: React.FC = () => {
   );
 };
 
-export default TableFaq;
+export default TableBrand;

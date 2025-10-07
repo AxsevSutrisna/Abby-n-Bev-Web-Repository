@@ -12,6 +12,11 @@ import TableVoucher from "../components/Tables/Voucher/TableVoucher"
 import FormPrivacyPolicy from "../components/Forms/PrivacyPolicy/FormPrivacyPolicy";
 import FormTermNConditions from "../components/Forms/TermAndConditions/FormTermAndConditions"
 import FormReturnPolicy from "../components/Forms/ReturnPolicy/ReturnPolicy";
+import FormAboutUs from "../components/Forms/AboutUs/FormAboutUs";
+import FormContactUs from "../components/Forms/ContactUs/FormContactUs";
+import TableSetting from "../components/Tables/Settings/TableSetting";
+import TableBrand from "../components/Tables/Brand/TableBrand";
+import TableCategoryType from "../components/Tables/CategoryTypes/TableCategoryTypes";
 
 type RouteItem = {
   key: string;
@@ -19,6 +24,7 @@ type RouteItem = {
   title: string;
 };
 
+// Add Routes or path
 const ComponentSetting = (): RouteItem[] => [
   { key: "/admin", component: <TableAdmin />, title: "Admin" },
   { key: "/customers", component: <TableCustomer />, title: "Customer" },
@@ -31,6 +37,11 @@ const ComponentSetting = (): RouteItem[] => [
   { key: "/privacy-policy", component: <FormPrivacyPolicy />, title: "Privacy Policy"},
   { key: "/tnc", component: <FormTermNConditions />, title: "Term and Conditions"},
   { key: "/return-policy", component: <FormReturnPolicy />, title: "Return Policy"},
+  { key: "/about-us", component: <FormAboutUs />, title: "About Us"},
+  { key: "/contact-us", component: <FormContactUs />, title: "Contact Us"},
+  { key: "/settings", component: <TableSetting />, title: "Settings"},
+  { key: "/brand-product", component: <TableBrand />, title: "Brands"},
+  { key: "/category-types", component: <TableCategoryType />, title: "Category Types"},
 ];
 
 export default function MasterPage(): React.ReactElement | null {

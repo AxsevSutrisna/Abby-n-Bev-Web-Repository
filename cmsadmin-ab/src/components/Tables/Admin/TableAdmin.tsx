@@ -129,7 +129,7 @@ const columns = (props: ColumnsCtx): ColumnsType<AdminRecord> => [
             okText="Yes"
             cancelText="No"
           >
-            <Button type="primary" danger icon={<DeleteOutlined />} />
+            <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </div>
       </div>
