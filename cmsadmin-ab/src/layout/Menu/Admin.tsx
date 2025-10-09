@@ -24,10 +24,12 @@ import {
   PhoneOutlined,
   WarningOutlined,
   ExclamationCircleOutlined,
+  TagOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import helper from "../../utils/helper";
 import type { RoleEnumType } from "../../utils/helper";
+
 
 /**
  * Build menu items based on current role level.
@@ -104,11 +106,35 @@ const MenuAdmin = (level: RoleEnumType): MenuProps["items"] => {
             key: "/concern-category",
             icon: <LikeOutlined />,
             label: "Concern Category",
+            children: [
+              helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+              key: "/concern",
+              icon: <TagOutlined />,
+              label: "Concern",
+              },
+              helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+              key: "/concern-option",
+              icon: <TagsOutlined />,
+              label: "Concern Option",
+              },
+            ].filter(Boolean) as MenuProps["items"],
           },
           helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
             key: "/profile-category",
             icon: <ProfileOutlined />,
             label: "Profile Category",
+            children: [
+              helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+              key: "/profile-category-filter",
+              icon: <LikeOutlined />,
+              label: "Profile Category",
+              },
+              helper.hasAnyPermission(level, [helper.RoleEnum.GUDANG]) && {
+              key: "/profile-category-option",
+              icon: <LikeOutlined />,
+              label: "Profile Category Option",
+              },
+            ].filter(Boolean) as MenuProps["items"],
           },
         ].filter(Boolean) as MenuProps["items"],
       },

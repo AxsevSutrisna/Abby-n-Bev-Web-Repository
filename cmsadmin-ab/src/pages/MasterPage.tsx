@@ -17,6 +17,11 @@ import FormContactUs from "../components/Forms/ContactUs/FormContactUs";
 import TableSetting from "../components/Tables/Settings/TableSetting";
 import TableBrand from "../components/Tables/Brand/TableBrand";
 import TableCategoryType from "../components/Tables/CategoryTypes/TableCategoryTypes";
+import TableConcern from "../components/Tables/Concern/TableConcern";
+import TableConcernOption from "../components/Tables/Concern/TableConcernOption";
+import TableProfileCategory from "../components/Tables/ProfileCategory/TableProfileCategory";
+import TableProfileCategoryOption from "../components/Tables/ProfileCategory/TableProfileCategoryOption";
+import TableFlashSale from "../components/Tables/FlashSale/TableFlashSale";
 
 type RouteItem = {
   key: string;
@@ -24,7 +29,6 @@ type RouteItem = {
   title: string;
 };
 
-// Add Routes or path
 const ComponentSetting = (): RouteItem[] => [
   { key: "/admin", component: <TableAdmin />, title: "Admin" },
   { key: "/customers", component: <TableCustomer />, title: "Customer" },
@@ -42,6 +46,11 @@ const ComponentSetting = (): RouteItem[] => [
   { key: "/settings", component: <TableSetting />, title: "Settings"},
   { key: "/brand-product", component: <TableBrand />, title: "Brands"},
   { key: "/category-types", component: <TableCategoryType />, title: "Category Types"},
+  { key: "/concern", component: <TableConcern />, title: "Concern"},
+  { key: "/concern-option", component: <TableConcernOption />, title: "Concern Option"},
+  { key: "/profile-category-filter", component: <TableProfileCategory />, title: "Profile Category"},
+  { key: "/profile-category-option", component: <TableProfileCategoryOption />, title: "Profile Category Option"},
+  { key: "/flash-sale", component: <TableFlashSale />, title: "Flash Sale"}
 ];
 
 export default function MasterPage(): React.ReactElement | null {
