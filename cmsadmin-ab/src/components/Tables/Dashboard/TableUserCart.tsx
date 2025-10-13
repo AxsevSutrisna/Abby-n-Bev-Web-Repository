@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Card, Select, Table, Input, Button, Image } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import type { TablePaginationConfig } from "antd/es/table";
-// import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import http from "../../../api/http";
 import placeholder from "../../../assets/img/placeholder.png";
 
@@ -72,7 +71,6 @@ const TableUserCart: React.FC = () => {
 
   useEffect(() => {
     fetchData(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange = (
@@ -89,7 +87,7 @@ const TableUserCart: React.FC = () => {
     setLoading(true);
     try {
       const response = await http.get(
-        `/v1/admin/user-carts?q=${filters.name}&page=${page.current}&pageSize=${page.pageSize}`
+        `/admin/user-carts?q=${filters.name}&page=${page.current}&pageSize=${page.pageSize}`
       );
 
       const serve = response?.data?.serve;

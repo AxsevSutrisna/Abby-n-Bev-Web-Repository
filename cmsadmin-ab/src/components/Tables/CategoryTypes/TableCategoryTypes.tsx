@@ -1,4 +1,3 @@
-// src/components/Tables/CategoryTypes/TableCategoryTypes.tsx
 import React from "react";
 import {
   Table,
@@ -18,8 +17,8 @@ import {
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import http from "../../../api/http"; // sesuaikan path util http Anda
-import FormCategoryType from "../../Forms/CategoryTypes/FormCategoryTypes"; // form Anda sebelumnya
+import http from "../../../api/http";
+import FormCategoryType from "../../Forms/CategoryTypes/FormCategoryTypes";
 
 export type CategoryTypeRecord = {
   id: number;
@@ -95,7 +94,6 @@ const TableCategoryTypes: React.FC = () => {
 
   React.useEffect(() => {
     fetchList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: ColumnsType<CategoryTypeRecord> = [
@@ -201,12 +199,11 @@ const TableCategoryTypes: React.FC = () => {
           <Space style={{ marginLeft: "auto" }}>
             <Search
               allowClear
-              placeholder="Search name…"
+              placeholder="Search Category Type"
               onSearch={(q) => {
                 const next = { q };
                 setParams(next);
                 fetchList(next);
-                // tutup semua expand ketika cari
                 setExpandedRowKeys([]);
               }}
             />
@@ -226,18 +223,16 @@ const TableCategoryTypes: React.FC = () => {
 
       <Table<CategoryTypeRecord>
         style={{ marginTop: 10 }}
-        rowKey={(record) => record.id} // gunakan number
+        rowKey={(record) => record.id}
         loading={loading}
         dataSource={data}
         columns={columns}
-        // pakai expandable controlled
         expandable={{
           childrenColumnName: "children",
           expandedRowKeys,
           onExpand,
           rowExpandable: (rec) => (rec.children?.length ?? 0) > 0,
         }}
-        // paging hanya untuk tampilan; data sudah full-tree
         pagination={{
           pageSize,
           showSizeChanger: false,

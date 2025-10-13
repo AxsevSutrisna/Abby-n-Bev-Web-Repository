@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Switch, message } from "antd";
+import { Form, Input, Button, Switch, message, Select } from "antd";
 import http from "../../../api/http";
+import { COUNTRY_OPTIONS } from "../../../constants/countries";
 
-/** ===== Types (samakan dengan yang dipakai Table) ===== */
 export type BrandPayload = {
   name: string;
   description?: string | null;
@@ -112,7 +112,13 @@ const FormBrand: React.FC<FormBrandProps> = ({ data, handleClose, fetch }) => {
       </Form.Item>
 
       <Form.Item label="Country" name="country">
-        <Input />
+        <Select
+          showSearch
+          allowClear
+          placeholder="Select country"
+          optionFilterProp="label"
+          options={COUNTRY_OPTIONS}
+        />
       </Form.Item>
 
       <Form.Item
@@ -124,7 +130,7 @@ const FormBrand: React.FC<FormBrandProps> = ({ data, handleClose, fetch }) => {
       </Form.Item>
 
       <Form.Item label="Active" name="isActive" valuePropName="checked">
-        {/* Switch -> boolean, nanti di-normalize jadi 1/0 */}
+        {}
         <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
       </Form.Item>
 

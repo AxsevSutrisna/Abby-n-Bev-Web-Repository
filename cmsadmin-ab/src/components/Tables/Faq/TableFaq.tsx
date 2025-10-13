@@ -1,4 +1,3 @@
-// src/components/Tables/FAQ/TableFaq.tsx
 import React from "react";
 import {
   Table,
@@ -119,7 +118,6 @@ const TableFaq: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<FAQRecord>["onChange"] = (page) => {
@@ -187,7 +185,7 @@ const TableFaq: React.FC = () => {
             className="flex align-center mt-2"
           >
             <Search
-              placeholder="Search data"
+              placeholder="Search Faq"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

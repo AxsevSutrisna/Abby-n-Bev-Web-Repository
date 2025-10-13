@@ -1,6 +1,5 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-// import type { FormInstance } from "antd/es/form";
 import http from "../../../api/http";
 
 const { TextArea } = Input;

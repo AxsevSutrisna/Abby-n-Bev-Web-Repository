@@ -3,7 +3,6 @@ import { Form, Input, InputNumber, Button, Select, message } from "antd";
 import type { FormProps } from "antd";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 export type ConcernOptionRecord = {
   id: number;
   slug: string;
@@ -16,7 +15,7 @@ export type ConcernOptionRecord = {
 type FormConcernOptionProps = {
   data?: ConcernOptionRecord | false;
   handleClose: () => void;
-  concernId?: number; // jika dibuka dari dalam concern detail
+  concernId?: number;
 };
 
 type OptionPayload = {
@@ -37,7 +36,6 @@ const FormConcernOption: React.FC<FormConcernOptionProps> = ({
   );
 
   React.useEffect(() => {
-    // muat daftar concern untuk dropdown ketika form stand-alone
     (async () => {
       if (concernId) return;
       try {
@@ -67,12 +65,10 @@ const FormConcernOption: React.FC<FormConcernOptionProps> = ({
     } else {
       form.setFieldsValue({ concernId, name: "", description: "", position: undefined });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, concernId]);
 
   const onFinish: FormProps<OptionPayload>["onFinish"] = async (values) => {
     try {
-      // jika dipanggil dari modal pada concern detail, pastikan concernId ada
       const payload: OptionPayload = {
         ...values,
         concernId: values.concernId ?? concernId,

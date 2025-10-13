@@ -29,7 +29,6 @@ const FormTermAndConditions: React.FC = () => {
     }
   };
 
-  /** ===== Submit Form ===== */
   const onFinish = async (values: TermAndConditionsData): Promise<void> => {
     try {
       const res = await http.post("/admin/term-and-conditions", values, {
@@ -48,7 +47,6 @@ const FormTermAndConditions: React.FC = () => {
     }
   };
 
-  /** ===== Render ===== */
   return (
     <Card title="Term and Conditions Form" style={{ marginTop: 10 }}>
       <Form<TermAndConditionsData>

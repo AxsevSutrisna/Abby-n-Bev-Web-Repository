@@ -1,4 +1,3 @@
-// src/components/Tables/Banner/TableBanner.tsx
 import React from "react";
 import {
   Table,
@@ -20,8 +19,6 @@ import FormBanner from "../../Forms/Banner/FormBanner";
 import http from "../../../api/http";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-/* ================= Types ================= */
 
 type BannerRecord = {
   id: number | string;
@@ -58,8 +55,6 @@ type ColumnsCtx = {
   setOpen: (open: boolean) => void;
   setCurrent: (rec: BannerRecord | false) => void;
 };
-
-/* ================= Columns ================= */
 
 const columns = (props: ColumnsCtx): ColumnsType<BannerRecord> => [
   {
@@ -163,8 +158,6 @@ const columns = (props: ColumnsCtx): ColumnsType<BannerRecord> => [
   },
 ];
 
-/* ================= Drag & Drop Row ================= */
-
 const ItemType = {
   ROW: "row",
 } as const;
@@ -228,8 +221,6 @@ const DraggableRow: React.FC<DraggableRowProps> = ({
   );
 };
 
-/* ================= Table Component ================= */
-
 const TableBanner: React.FC = () => {
   const [data, setData] = React.useState<BannerRecord[]>([]);
   const [params, setParams] = React.useState<QueryParams>({ name: "" });
@@ -245,7 +236,6 @@ const TableBanner: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<BannerRecord>["onChange"] = (page) => {
@@ -285,10 +275,7 @@ const TableBanner: React.FC = () => {
     setData(newData);
   };
 
-  // Kalau definisi FormBanner tidak menerima "handleClose" dan "fetch",
-  // kita pakai casting agar file ini tetap lulus type-check.
   const FormBannerAny = FormBanner as React.ComponentType<any>;
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Card style={{ marginTop: 10 }}>
@@ -324,7 +311,7 @@ const TableBanner: React.FC = () => {
             className="flex align-center mt-2"
           >
             <Search
-              placeholder="Search data"
+              placeholder="Search Banner"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

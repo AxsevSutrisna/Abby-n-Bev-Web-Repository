@@ -48,7 +48,6 @@ const FormAboutUs: React.FC = () => {
     }
   };
 
-  /** ===== Render ===== */
   return (
     <Card title="About Us Form" style={{ marginTop: 10 }}>
       <Form<AboutUsData>

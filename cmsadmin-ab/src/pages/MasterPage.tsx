@@ -1,16 +1,17 @@
 import React from "react";
-import { useLocation, Navigate } from "react-router-dom";
-import TableAdmin from "../components/Tables/Admin/TableAdmin";
+import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
+
+import TableAdmin from "../components/Tables/Admin/TableAdmin";
 import TableCustomer from "../components/Tables/Customer/TableCustomer";
 import TableTag from "../components/Tables/Tag/TableTag";
 import TablePersona from "../components/Tables/Persona/TablePersona";
-import TableBanner from "../components/Tables/Banner/TableBanner"
+import TableBanner from "../components/Tables/Banner/TableBanner";
 import TableActivityLog from "../components/Tables/ActivityLog/TableActivityLog";
 import TableFaq from "../components/Tables/Faq/TableFaq";
-import TableVoucher from "../components/Tables/Voucher/TableVoucher"
+import TableVoucher from "../components/Tables/Voucher/TableVoucher";
 import FormPrivacyPolicy from "../components/Forms/PrivacyPolicy/FormPrivacyPolicy";
-import FormTermNConditions from "../components/Forms/TermAndConditions/FormTermAndConditions"
+import FormTermNConditions from "../components/Forms/TermAndConditions/FormTermAndConditions";
 import FormReturnPolicy from "../components/Forms/ReturnPolicy/ReturnPolicy";
 import FormAboutUs from "../components/Forms/AboutUs/FormAboutUs";
 import FormContactUs from "../components/Forms/ContactUs/FormContactUs";
@@ -22,48 +23,38 @@ import TableConcernOption from "../components/Tables/Concern/TableConcernOption"
 import TableProfileCategory from "../components/Tables/ProfileCategory/TableProfileCategory";
 import TableProfileCategoryOption from "../components/Tables/ProfileCategory/TableProfileCategoryOption";
 import TableFlashSale from "../components/Tables/FlashSale/TableFlashSale";
+import TableProduct from "../components/Tables/Product/TableProduct";
 
-type RouteItem = {
-  key: string;
-  component: React.ReactNode;
-  title: string;
-};
-
-const ComponentSetting = (): RouteItem[] => [
-  { key: "/admin", component: <TableAdmin />, title: "Admin" },
-  { key: "/customers", component: <TableCustomer />, title: "Customer" },
-  { key: "/tag-product", component: <TableTag />, title: "Tag"},
-  { key: "/persona-product", component: <TablePersona />, title: "Persona"},
-  { key: "/banners", component: <TableBanner />, title: "Banner"},
-  { key: "/activity-logs", component: <TableActivityLog />, title: "Activity Log"},
-  { key: "/faqs", component: <TableFaq />, title: "FAQ"},
-  { key: "/voucher", component: <TableVoucher />, title: "Voucher"},
-  { key: "/privacy-policy", component: <FormPrivacyPolicy />, title: "Privacy Policy"},
-  { key: "/tnc", component: <FormTermNConditions />, title: "Term and Conditions"},
-  { key: "/return-policy", component: <FormReturnPolicy />, title: "Return Policy"},
-  { key: "/about-us", component: <FormAboutUs />, title: "About Us"},
-  { key: "/contact-us", component: <FormContactUs />, title: "Contact Us"},
-  { key: "/settings", component: <TableSetting />, title: "Settings"},
-  { key: "/brand-product", component: <TableBrand />, title: "Brands"},
-  { key: "/category-types", component: <TableCategoryType />, title: "Category Types"},
-  { key: "/concern", component: <TableConcern />, title: "Concern"},
-  { key: "/concern-option", component: <TableConcernOption />, title: "Concern Option"},
-  { key: "/profile-category-filter", component: <TableProfileCategory />, title: "Profile Category"},
-  { key: "/profile-category-option", component: <TableProfileCategoryOption />, title: "Profile Category Option"},
-  { key: "/flash-sale", component: <TableFlashSale />, title: "Flash Sale"}
-];
-
-export default function MasterPage(): React.ReactElement | null {
-  const { pathname } = useLocation();
-  const matched = ComponentSetting().find((v) => v.key === pathname);
-
-  if (!matched) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
+export default function MasterPage(): React.ReactElement {
   return (
-    <MainLayout title={matched.title} key={pathname}>
-      {matched.component}
+    <MainLayout>
+      <Routes>
+        <Route path="/admin" element={<TableAdmin />} />
+        <Route path="/customers" element={<TableCustomer />} />
+        <Route path="/tag-product" element={<TableTag />} />
+        <Route path="/persona-product" element={<TablePersona />} />
+        <Route path="/banners" element={<TableBanner />} />
+        <Route path="/activity-logs" element={<TableActivityLog />} />
+        <Route path="/faqs" element={<TableFaq />} />
+        <Route path="/voucher" element={<TableVoucher />} />
+        <Route path="/privacy-policy" element={<FormPrivacyPolicy />} />
+        <Route path="/tnc" element={<FormTermNConditions />} />
+        <Route path="/return-policy" element={<FormReturnPolicy />} />
+        <Route path="/about-us" element={<FormAboutUs />} />
+        <Route path="/contact-us" element={<FormContactUs />} />
+        <Route path="/settings" element={<TableSetting />} />
+        <Route path="/brand-product" element={<TableBrand />} />
+        <Route path="/category-types" element={<TableCategoryType />} />
+        <Route path="/concern" element={<TableConcern />} />
+        <Route path="/concern-option" element={<TableConcernOption />} />
+        <Route path="/profile-category-filter" element={<TableProfileCategory />} />
+        <Route path="/profile-category-option" element={<TableProfileCategoryOption />} />
+        <Route path="/flash-sale" element={<TableFlashSale />} />
+        <Route path="/inventory-product" element={<TableProduct />} />
+
+        {/* Redirect default */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
     </MainLayout>
   );
 }

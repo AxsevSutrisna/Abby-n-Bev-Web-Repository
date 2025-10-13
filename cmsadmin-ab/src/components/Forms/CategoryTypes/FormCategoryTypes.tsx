@@ -1,9 +1,7 @@
 import React from "react";
 import { Form, Input, Button, Select, Space } from "antd";
-// import type { FormInstance } from "antd/es/form";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 export type CategoryTypeRecord = {
   id: number | string;
   name: string;
@@ -26,7 +24,6 @@ type FormCategoryTypeProps = {
   fetch?: () => void;
 };
 
-/** Util: flatten tree untuk opsi parent */
 const flattenTree = (nodes: CategoryTypeRecord[] = [], depth = 0): { value: number; label: string; level: number }[] => {
   const pad = (n: number) => (n > 0 ? "— ".repeat(n) : "");
   const arr: { value: number; label: string; level: number }[] = [];
@@ -47,7 +44,6 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
   const isEdit = !!data;
 
   React.useEffect(() => {
-    // initial form values
     const init: FormValues = {
       id: data?.id,
       name: data?.name ?? "",
@@ -55,11 +51,9 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
       level: data?.level ?? (data?.parentId ? 2 : 1),
     };
     form.setFieldsValue(init);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   React.useEffect(() => {
-    // ambil tree utk dropdown parent
     const fetchParents = async () => {
       try {
         const resp = await http.get("/admin/category-types/list");
@@ -73,7 +67,6 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
     fetchParents();
   }, []);
 
-  /** Hitung level saat parent berubah */
   const handleParentChange = (parentId?: number | null) => {
     if (!parentId) {
       form.setFieldValue("level", 1);
@@ -85,7 +78,6 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
   };
 
   const onFinish = async (values: FormValues) => {
-    // normalisasi optional: jangan kirim kalau null
     const payload: any = {
       name: values.name,
       ...(values.parentId ? { parentId: values.parentId } : {}),
@@ -101,7 +93,7 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
       form.resetFields();
       handleClose();
     } catch (e) {
-      // biarkan toast global/handler http yg menampilkan error message
+      console.error(e);
     }
   };
 
@@ -115,7 +107,7 @@ const FormCategoryType: React.FC<FormCategoryTypeProps> = ({ data, handleClose }
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
-      {/* Hidden ID (tidak dipakai backend) */}
+      {}
       <Form.Item name="id" hidden>
         <Input type="hidden" />
       </Form.Item>

@@ -1,9 +1,7 @@
-// src/components/Forms/Setting/FormSetting.tsx
 import React, { useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 type SettingData = {
   id?: number | string;
   key: string;
@@ -17,15 +15,11 @@ type FormSettingProps = {
   fetch?: () => void;
 };
 
-/** ===== Component ===== */
 const FormSetting: React.FC<FormSettingProps> = (props) => {
   const [form] = Form.useForm<SettingData>();
-
-  /** ===== Submit Form ===== */
   const onFinish = async (values: SettingData) => {
     try {
       if (props.data) {
-        // Update
         values.id = props.data.id;
         const res = await http.put("/admin/settings", values);
         if (res) {
@@ -34,7 +28,6 @@ const FormSetting: React.FC<FormSettingProps> = (props) => {
           props.handleClose();
         }
       } else {
-        // Create new
         const res = await http.post("/admin/settings", values);
         if (res) {
           message.success("Setting created successfully!");
@@ -51,8 +44,6 @@ const FormSetting: React.FC<FormSettingProps> = (props) => {
   const onFinishFailed = (errorInfo: unknown) => {
     console.warn("Failed:", errorInfo);
   };
-
-  /** ===== Initial Values ===== */
   const initValues: SettingData = {
     id: props.data?.id || "",
     key: props.data?.key || "",
@@ -62,10 +53,7 @@ const FormSetting: React.FC<FormSettingProps> = (props) => {
 
   useEffect(() => {
     form.setFieldsValue(initValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.data]);
-
-  /** ===== Render ===== */
   return (
     <Form<SettingData>
       form={form}

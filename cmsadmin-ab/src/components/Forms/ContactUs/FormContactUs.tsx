@@ -29,7 +29,6 @@ const FormContactUs: React.FC = () => {
     }
   };
 
-  /** ===== Submit Form ===== */
   const onFinish = async (values: ContactUsData): Promise<void> => {
     try {
       const res = await http.post("/admin/contact-us", values, {
@@ -48,7 +47,6 @@ const FormContactUs: React.FC = () => {
     }
   };
 
-  /** ===== Render ===== */
   return (
     <Card title="Contact Us Form" style={{ marginTop: 10 }}>
       <Form<ContactUsData>

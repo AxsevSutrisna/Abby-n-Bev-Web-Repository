@@ -1,4 +1,3 @@
-// src/components/Forms/PrivacyPolicy/FormPrivacyPolicy.tsx
 import React, { useEffect } from "react";
 import { Form, Button, Card, message } from "antd";
 import ReactQuill from "react-quill";
@@ -11,13 +10,10 @@ type PrivacyPolicyData = {
 
 const FormPrivacyPolicy: React.FC = () => {
   const [form] = Form.useForm<PrivacyPolicyData>();
-
-  // Fetch Privacy Policy saat komponen pertama kali di-mount
   useEffect(() => {
     fetchPrivacyPolicy();
   }, []);
 
-  /** ===== Fetch Privacy Policy ===== */
   const fetchPrivacyPolicy = async (): Promise<void> => {
     try {
       const response = await http.get("/admin/privacy-policy");
@@ -34,7 +30,6 @@ const FormPrivacyPolicy: React.FC = () => {
     }
   };
 
-  /** ===== Submit Form ===== */
   const onFinish = async (values: PrivacyPolicyData): Promise<void> => {
     try {
       const res = await http.post("/admin/privacy-policy", values, {
@@ -53,7 +48,6 @@ const FormPrivacyPolicy: React.FC = () => {
     }
   };
 
-  /** ===== Render ===== */
   return (
     <Card title="Privacy Policy Form" style={{ marginTop: 10 }}>
       <Form<PrivacyPolicyData>

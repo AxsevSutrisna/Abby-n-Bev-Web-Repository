@@ -5,7 +5,6 @@ import type { ColumnsType, TablePaginationConfig, TableProps } from "antd/es/tab
 import moment from "moment";
 import http from "../../../api/http";
 
-/** ====== Types ====== */
 type CustomerRecord = {
   id: number | string;
   name: string;
@@ -42,7 +41,6 @@ type ColumnsCtx = {
   setCurrent: (rec: CustomerRecord | false) => void;
 };
 
-/** ====== Columns ====== */
 const columns = (props: ColumnsCtx): ColumnsType<CustomerRecord> => [
   {
     title: "Name",
@@ -123,7 +121,6 @@ const TableCustomer: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<CustomerRecord>["onChange"] = (page) => {
@@ -190,7 +187,7 @@ const TableCustomer: React.FC = () => {
 
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search data"
+              placeholder="Search Customer"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

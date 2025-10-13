@@ -37,7 +37,6 @@ const FormConcern: React.FC<FormConcernProps> = ({ data, handleClose }) => {
         position: data.position ?? undefined,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const onFinish: FormProps<ConcernPayload>["onFinish"] = async (values) => {
@@ -63,7 +62,7 @@ const FormConcern: React.FC<FormConcernProps> = ({ data, handleClose }) => {
       onFinish={onFinish}
       initialValues={{ name: "", description: "", position: undefined }}
     >
-      {/* hidden id for update payload if needed by your backend */}
+      {}
       <Form.Item name="id" hidden>
         <input type="hidden" />
       </Form.Item>

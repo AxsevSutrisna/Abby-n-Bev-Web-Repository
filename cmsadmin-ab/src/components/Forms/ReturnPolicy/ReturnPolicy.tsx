@@ -29,7 +29,6 @@ const FormReturnPolicy: React.FC = () => {
     }
   };
 
-  /** ===== Submit Form ===== */
   const onFinish = async (values: ReturnPolicyData): Promise<void> => {
     try {
       const res = await http.post("/admin/return-policy", values, {
@@ -48,7 +47,6 @@ const FormReturnPolicy: React.FC = () => {
     }
   };
 
-  /** ===== Render ===== */
   return (
     <Card title="Return Policy Form" style={{ marginTop: 10 }}>
       <Form<ReturnPolicyData>

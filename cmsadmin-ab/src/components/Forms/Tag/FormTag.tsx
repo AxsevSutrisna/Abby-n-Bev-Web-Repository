@@ -1,10 +1,8 @@
-// src/components/Forms/Tag/FormTag.tsx
 import React from "react";
 import { Form, Input, Button } from "antd";
 import type { FormInstance } from "antd";
 import http from "../../../api/http";
 
-/** ==== Types ==== */
 type TagRecord = {
   id: number | string;
   name: string;
@@ -28,7 +26,6 @@ const FormTag: React.FC<FormTagProps> = ({ data, handleClose }) => {
   const onFinish = async (values: FormValues) => {
     try {
       if (data) {
-        // UPDATE
         const res = await http.put(`/admin/tags/${data.slug}`, {
           name: values.name,
         });
@@ -37,7 +34,6 @@ const FormTag: React.FC<FormTagProps> = ({ data, handleClose }) => {
           handleClose();
         }
       } else {
-        // CREATE
         const res = await http.post("/admin/tags", {
           name: values.name,
         });
@@ -47,7 +43,6 @@ const FormTag: React.FC<FormTagProps> = ({ data, handleClose }) => {
         }
       }
     } catch (err) {
-      // optional: message.error(...)
       console.error("Save tag failed:", err);
     }
   };
@@ -62,7 +57,7 @@ const FormTag: React.FC<FormTagProps> = ({ data, handleClose }) => {
   };
 
   React.useEffect(() => {
-    form.setFieldsValue(init); // <= sekarang tipe cocok (Partial<FormValues>)
+    form.setFieldsValue(init);
   }, [data, form, init.id, init.name]);
 
   return (

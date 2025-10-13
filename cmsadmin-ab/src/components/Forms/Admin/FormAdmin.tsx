@@ -1,4 +1,3 @@
-// src/components/Forms/Admin/FormAdmin.tsx
 import React from "react";
 import { Form, Input, Button, Select, message } from "antd";
 import type { FormInstance } from "antd/es/form";
@@ -7,7 +6,7 @@ import http from "../../../api/http";
 type AdminFormProps = {
   data?: {
     id: number | string;
-    name?: string;              // "Super Abby"
+    name?: string;
     email?: string;
     role?: number | string;
   };
@@ -19,7 +18,7 @@ type AdminFormValues = {
   firstName: string;
   lastName: string;
   email: string;
-  password?: string;            // optional on update, required on create
+  password?: string;
   role: number;
 };
 
@@ -58,7 +57,6 @@ const FormAdmin: React.FC<AdminFormProps> = ({ data, handleClose }) => {
   const onFinish = async (values: AdminFormValues) => {
     try {
       if (isEdit) {
-        // ===== UPDATE → snake_case; password WAJIB DIKIRIM (string atau null) =====
         const payload = {
           first_name: values.firstName.trim(),
           last_name: values.lastName.trim(),
@@ -67,19 +65,18 @@ const FormAdmin: React.FC<AdminFormProps> = ({ data, handleClose }) => {
           password:
             values.password && values.password.trim().length > 0
               ? values.password
-              : null, // <— penting: harus dikirim walau null
+              : null,
         };
 
         await http.put(`/admin/users/${values.id}`, payload);
         message.success("Admin updated");
       } else {
-        // ===== CREATE → camelCase; password wajib =====
         const payload = {
           firstName: values.firstName.trim(),
           lastName: values.lastName.trim(),
           email: values.email.trim(),
           role: Number(values.role),
-          password: values.password, // required by createUser
+          password: values.password,
         };
 
         await http.post(`/admin/users`, payload);
@@ -94,7 +91,7 @@ const FormAdmin: React.FC<AdminFormProps> = ({ data, handleClose }) => {
         err?.response?.data?.serve?.[0]?.message ||
         "Submission failed, please try again!";
       message.error(serverMsg);
-      // console.error(err);
+      console.error(err);
     }
   };
 
@@ -131,7 +128,7 @@ const FormAdmin: React.FC<AdminFormProps> = ({ data, handleClose }) => {
         tooltip={isEdit ? "Leave empty to keep current password" : undefined}
         rules={
           isEdit
-            ? [] // optional on update
+            ? []
             : [
                 { required: true, message: "Password is required" },
                 { min: 6, message: "Min 6 characters" },

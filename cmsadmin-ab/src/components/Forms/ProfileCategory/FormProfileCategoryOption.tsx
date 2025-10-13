@@ -3,21 +3,18 @@ import { Form, Input, Button, Select, Switch, message } from "antd";
 import type { FormProps } from "antd";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 export type ProfileCategoryOptionRecord = {
   id: number;
   profileCategoriesId: number;
   label: string;
   value: string;
   isActive?: boolean;
-  // relations (optional)
   category?: { id: number; name: string } | null;
 };
 
 type Props = {
   data?: ProfileCategoryOptionRecord | false;
   handleClose: () => void;
-  /** Jika form dibuka dari modal di dalam Profile Category */
   categoryId?: number;
 };
 
@@ -34,10 +31,9 @@ const FormProfileCategoryOption: React.FC<Props> = ({ data, handleClose, categor
     { value: number; label: string }[]
   >([]);
 
-  /** Muat pilihan kategori untuk dropdown jika form berdiri sendiri */
   React.useEffect(() => {
     (async () => {
-      if (categoryId) return; // tidak perlu dropdown
+      if (categoryId) return;
       try {
         const resp = await http.get(
           "/admin/profile-categories?q=&page=1&per_page=9999"
@@ -48,12 +44,10 @@ const FormProfileCategoryOption: React.FC<Props> = ({ data, handleClose, categor
           (list || []).map((c: any) => ({ value: c.id, label: c.name }))
         );
       } catch {
-        // ignore
       }
     })();
   }, [categoryId]);
 
-  /** Set nilai awal form */
   React.useEffect(() => {
     form.resetFields();
     if (data) {
@@ -71,7 +65,6 @@ const FormProfileCategoryOption: React.FC<Props> = ({ data, handleClose, categor
         isActive: true,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, categoryId]);
 
   const onFinish: FormProps<Payload>["onFinish"] = async (values) => {

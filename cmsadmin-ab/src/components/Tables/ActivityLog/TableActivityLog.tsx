@@ -78,7 +78,6 @@ const TableActivityLog: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<ActivityLogRecord>["onChange"] = (page) => {
@@ -145,7 +144,7 @@ const TableActivityLog: React.FC = () => {
           {/* Tambahkan Search Bar */}
           <Space style={{ marginLeft: "auto" }}>
             <Search
-              placeholder="Search activity logs"
+              placeholder="Search activity"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

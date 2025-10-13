@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Button, Empty, Select, Statistic, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import MainLayout from "../layout/MainLayout";
-import useIsMobile from "../utils/responsive";
+// import useIsMobile from "../utils/responsive";
 import dashboardShape from "../assets/img/dashboard-shape.svg";
 import http from "../api/http";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +29,8 @@ interface TotalResponse {
 }
 
 const DashboardPage: React.FC = () => {
-  const isMobile = useIsMobile();
-  const navigate = useNavigate(); // ✅ gunakan hook v6
+  // const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const [topProducts, setTopProducts] = useState<ProductTable[]>([]);
   const [leastProducts, setLeastProducts] = useState<ProductTable[]>([]);
@@ -48,7 +48,6 @@ const DashboardPage: React.FC = () => {
     fetchTotalUsers();
     fetchTotalTransactionMonth();
     fetchTotalTransaction();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchTopProducts = async () => {

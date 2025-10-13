@@ -1,4 +1,3 @@
-// src/components/Tables/Settings/TableSetting.tsx
 import React from "react";
 import {
   Table,
@@ -15,7 +14,6 @@ import { PlusOutlined, EditOutlined } from "@ant-design/icons";
 import http from "../../../api/http";
 import FormSetting from "../../Forms/Settings/FormSetting";
 
-/** ========= Types ========= */
 type SettingRecord = {
   id: number | string;
   key: string;
@@ -46,7 +44,6 @@ type ColumnsCtx = {
   fetch: () => void;
 };
 
-/** ========= Columns ========= */
 const buildColumns = (ctx: ColumnsCtx): ColumnsType<SettingRecord> => [
   { title: "Key", dataIndex: "key" },
   { title: "Group", dataIndex: "group" },
@@ -81,7 +78,6 @@ const buildColumns = (ctx: ColumnsCtx): ColumnsType<SettingRecord> => [
   },
 ];
 
-/** ========= Component ========= */
 const TableSetting: React.FC = () => {
   const [data, setData] = React.useState<SettingRecord[]>([]);
   const [params, setParams] = React.useState<QueryParams>({ name: "" });
@@ -98,7 +94,6 @@ const TableSetting: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<SettingRecord>["onChange"] = (page) => {
@@ -167,7 +162,7 @@ const TableSetting: React.FC = () => {
 
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search data"
+              placeholder="Search Settings"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);
@@ -178,7 +173,7 @@ const TableSetting: React.FC = () => {
               icon={<PlusOutlined />}
               type="primary"
               onClick={() => {
-                setCurrent(false); // create mode
+                setCurrent(false); 
                 setOpen(true);
               }}
             >

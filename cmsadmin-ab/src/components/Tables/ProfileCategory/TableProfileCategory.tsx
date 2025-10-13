@@ -1,4 +1,3 @@
-// src/components/Tables/ProfileCategory/TableProfileCategory.tsx
 import React from "react";
 import {
   Table,
@@ -24,21 +23,19 @@ import FormProfileCategory from "../../Forms/ProfileCategory/FormProfileCategory
 import type { ProfileCategoryRecord } from "../../Forms/ProfileCategory/FormProfileCategory";
 import TableProfileCategoryOption from "./TableProfileCategoryOption";
 
-/** ===== Types ===== */
 type QueryParams = { q?: string };
 
-// Bentuk 1 (kalau backend mengirim serve)
 type ServePayload = {
   currentPage: string | number;
   perPage: string | number;
   total: string | number;
   data: (ProfileCategoryRecord & { options?: Array<any> })[];
 };
+
 type ListResponseServe = {
   data?: { serve: ServePayload };
 };
 
-// Bentuk 2 (sesuai controller kamu sekarang: status + data + meta)
 type MetaPayload = {
   total: number;
   perPage: number;
@@ -66,11 +63,8 @@ const TableProfileCategory: React.FC = () => {
     total: 0,
   });
   const [loading, setLoading] = React.useState(false);
-
   const [open, setOpen] = React.useState(false);
   const [current, setCurrent] = React.useState<ProfileCategoryRecord | false>(false);
-
-  // modal untuk Options (children)
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [drawerCategory, setDrawerCategory] = React.useState<ProfileCategoryRecord | null>(
     null
@@ -78,7 +72,6 @@ const TableProfileCategory: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchList = async (
@@ -94,8 +87,6 @@ const TableProfileCategory: React.FC = () => {
       }`;
 
       const resp = (await http.get(url)) as ListResponseServe & ListResponseMeta;
-
-      // Coba bentuk "serve"
       const serve = (resp as ListResponseServe)?.data?.serve;
       if (serve) {
         setData(serve.data || []);
@@ -107,7 +98,6 @@ const TableProfileCategory: React.FC = () => {
         return;
       }
 
-      // Coba bentuk "data + meta"
       const r2 = (resp as ListResponseMeta)?.data;
       if (r2 && Array.isArray(r2.data) && r2.meta) {
         setData(r2.data || []);
@@ -118,8 +108,6 @@ const TableProfileCategory: React.FC = () => {
         });
         return;
       }
-
-      // Fallback
       setData([]);
       setPagination((p) => ({ ...p, total: 0 }));
     } catch (e: any) {
@@ -186,11 +174,9 @@ const TableProfileCategory: React.FC = () => {
             cancelText="No"
             onConfirm={async () => {
               try {
-                // Soft delete (sesuai controller)
                 await http.delete(`/admin/profile-categories/${record.id}`);
                 optimisticRemove(record.id);
                 message.success("Deleted");
-                // sinkronkan lagi (opsional)
                 fetchList(params, pagination);
               } catch (e: any) {
                 message.error(e?.response?.data?.message || "Delete failed");
@@ -234,7 +220,7 @@ const TableProfileCategory: React.FC = () => {
 
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search name…"
+              placeholder="Search Profile Category"
               allowClear
               onSearch={(val) => {
                 const next = { q: val };

@@ -1,14 +1,11 @@
-// src/components/Forms/Banner/FormBanner.tsx
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message, Select, Switch, Upload } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
-// import type { FormInstance } from "antd/es/form";
 import http from "../../../api/http";
 import helper from "../../../utils/helper";
 
 const { Option } = Select;
 
-/** ===== Types ===== */
 type BannerRecord = {
   id: number | string;
   title: string;
@@ -39,7 +36,6 @@ type FormValues = {
   image_mobile: UploadFile[];
 };
 
-/** ===== Component ===== */
 const FormBanner: React.FC<FormBannerProps> = ({ data }) => {
   const [form] = Form.useForm<FormValues>();
   const [isHasButton, setIsHasButton] = useState<boolean>(false);
@@ -58,7 +54,6 @@ const FormBanner: React.FC<FormBannerProps> = ({ data }) => {
       return;
     }
 
-    // Prepare data
     formData.append("title", values.title || "");
     formData.append("description", values.description || "");
     formData.append("position", values.position);
@@ -107,7 +102,6 @@ const FormBanner: React.FC<FormBannerProps> = ({ data }) => {
     setIsHasButton(checked);
   };
 
-  /** Default init values */
   useEffect(() => {
     const init: Partial<FormValues> = {
       id: data?.id,

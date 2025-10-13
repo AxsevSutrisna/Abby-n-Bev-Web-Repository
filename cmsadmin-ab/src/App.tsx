@@ -1,9 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import ProtectedRoute from "./apps/ProtectedRoutes";
+
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ForgotPage from "./pages/ForgotPage";
 import MasterPage from "./pages/MasterPage";
+import AddProductPage from "./pages/AddProductPage";
 
 export default function App() {
   return (
@@ -25,12 +32,23 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        {/* Semua route modul yang dikelola MasterPage (mis: /admin, dst) */}
+
+        {/* Semua route modul CMS */}
         <Route
           path="/*"
           element={
             <ProtectedRoute>
               <MasterPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ✅ Tambahkan route untuk form product */}
+        <Route
+          path="/product-form"
+          element={
+            <ProtectedRoute>
+              <AddProductPage />
             </ProtectedRoute>
           }
         />

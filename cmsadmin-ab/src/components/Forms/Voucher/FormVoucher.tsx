@@ -1,11 +1,9 @@
-// src/components/Forms/Voucher/FormVoucher.tsx
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select, Radio } from "antd";
 import moment from "moment";
 import http from "../../../api/http";
 import helper from "../../../utils/helper";
 
-/** ===== Types ===== */
 type VoucherFormValues = {
   id?: number | string;
   name: string;
@@ -92,7 +90,6 @@ const FormVoucher: React.FC<FormVoucherProps> = ({ data, handleClose }) => {
   useEffect(() => {
     form.setFieldsValue(init);
     setTypeDisc(init.is_percentage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (

@@ -22,7 +22,6 @@ import FormProfile from "../components/Forms/Auth/FormProfile";
 import MenuAdmin from "./Menu/Admin";
 import { useNavigate, useLocation } from "react-router-dom";
 
-// ==== Types ====
 interface MainLayoutProps {
   children: ReactNode;
   title?: string;
@@ -30,7 +29,6 @@ interface MainLayoutProps {
   overflow?: "auto" | "hidden" | "scroll" | "visible";
 }
 
-// ==== Hook untuk cek mobile ====
 const getIsMobile = () => window.innerWidth <= 768;
 
 function useIsMobile() {
@@ -45,7 +43,6 @@ function useIsMobile() {
   return isMobile;
 }
 
-// ==== MainLayout ====
 const MainLayout: FC<MainLayoutProps> = (props) => {
   const isMobile = useIsMobile();
   const [collapsed, setCollapsed] = useState(false);
@@ -58,7 +55,6 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // collapse otomatis ketika mobile
   useEffect(() => {
     setCollapsed(isMobile);
   }, [isMobile]);

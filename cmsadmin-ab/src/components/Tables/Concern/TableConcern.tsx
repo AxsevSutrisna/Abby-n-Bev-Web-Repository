@@ -18,7 +18,6 @@ import FormConcern from "../../Forms/Concern/FormConcern";
 import type { ConcernRecord } from "../../Forms/Concern/FormConcern";
 import TableConcernOption from "../Concern/TableConcernOption";
 
-/** ===== Types ===== */
 type QueryParams = { q?: string };
 
 type ServePayload = {
@@ -52,7 +51,6 @@ const TableConcern: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchList = async (q: QueryParams = params, page?: TablePaginationConfig) => {
@@ -189,7 +187,7 @@ const TableConcern: React.FC = () => {
 
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search name…"
+              placeholder="Search Concern"
               allowClear
               onSearch={(val) => {
                 const next = { q: val };

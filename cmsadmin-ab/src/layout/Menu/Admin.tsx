@@ -30,11 +30,6 @@ import type { MenuProps } from "antd";
 import helper from "../../utils/helper";
 import type { RoleEnumType } from "../../utils/helper";
 
-
-/**
- * Build menu items based on current role level.
- * Return type matches AntD v5 Menu "items" prop.
- */
 const MenuAdmin = (level: RoleEnumType): MenuProps["items"] => {
   return (
     [
@@ -44,7 +39,6 @@ const MenuAdmin = (level: RoleEnumType): MenuProps["items"] => {
         label: "Dashboard",
       },
 
-      // Admin only
       helper.hasAnyPermission(level, [helper.RoleEnum.ADMINISTRATOR]) && {
         key: "/admin",
         icon: <UsergroupAddOutlined />,

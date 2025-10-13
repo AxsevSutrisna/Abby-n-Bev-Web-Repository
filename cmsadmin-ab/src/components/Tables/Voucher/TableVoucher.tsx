@@ -1,4 +1,3 @@
-// src/components/Tables/Voucher/TableVoucher.tsx
 import React from "react";
 import {
   Table,
@@ -21,18 +20,16 @@ import FormVoucher from "../../Forms/Voucher/FormVoucher";
 import http from "../../../api/http";
 import helper from "../../../utils/helper";
 
-/** ========= Types ========= */
 type VoucherRecord = {
   id: number | string;
   name: string;
   code: string;
-  // price bisa kosong kalau pakai percentage
   price?: number;
   percentage?: number;
   maxDiscPrice?: number;
   isPercentage: 0 | 1;
-  isActive: 1 | 2; // 1=active, 2=non active
-  type: 1 | 2; // 1=discount, 2=shipping
+  isActive: 1 | 2;
+  type: 1 | 2;
   qty: number;
   startedAt: string;
   expiredAt: string;
@@ -61,7 +58,6 @@ type ColumnsCtx = {
   setCurrent: (rec: VoucherRecord | false) => void;
 };
 
-/** ========= Columns ========= */
 const columns = (props: ColumnsCtx): ColumnsType<VoucherRecord> => [
   {
     title: "Name",
@@ -197,7 +193,6 @@ const columns = (props: ColumnsCtx): ColumnsType<VoucherRecord> => [
   },
 ];
 
-/** ========= Component ========= */
 const TableVoucher: React.FC = () => {
   const [data, setData] = React.useState<VoucherRecord[]>([]);
   const [params, setParams] = React.useState<QueryParams>({ name: "" });
@@ -213,7 +208,6 @@ const TableVoucher: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<VoucherRecord>["onChange"] = (page) => {
@@ -280,7 +274,7 @@ const TableVoucher: React.FC = () => {
 
           <div style={{ marginLeft: "auto" }} className="flex align-center">
             <Search
-              placeholder="Search data"
+              placeholder="Search Voucher"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

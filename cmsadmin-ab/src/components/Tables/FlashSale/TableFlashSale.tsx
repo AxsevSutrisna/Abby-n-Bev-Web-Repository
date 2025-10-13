@@ -32,7 +32,6 @@ const TableFlashSale: React.FC = () => {
     setLoading(true);
     try {
       const resp = await http.get(BASE_URL);
-      // controller returns { serve: FlashSale[] }
       const list: FlashSaleRecord[] = resp?.data?.serve ?? [];
       setRows(list);
       setFiltered(list);
@@ -142,7 +141,7 @@ const TableFlashSale: React.FC = () => {
       <Card style={{ marginTop: 10 }}>
         <div className="flex flex-wrap" style={{ width: "100%", alignItems: "flex-end" }}>
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
-            <Search placeholder="Search title/description…" allowClear onSearch={onSearch} />
+            <Search placeholder="Search FlashSale" allowClear onSearch={onSearch} />
             <Button
               icon={<PlusOutlined />}
               type="primary"

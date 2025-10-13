@@ -72,8 +72,6 @@ const helper = {
     allowedRoles: RoleEnumType[]
   ): boolean {
     if (!roleId) return false;
-
-    // admin bisa akses semua
     if (roleId === RoleEnum.ADMINISTRATOR) return true;
 
     return allowedRoles.includes(roleId);

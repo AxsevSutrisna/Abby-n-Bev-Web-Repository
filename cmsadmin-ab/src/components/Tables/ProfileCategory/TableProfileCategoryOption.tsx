@@ -25,7 +25,6 @@ type QueryParams = {
 
 type Row = ProfileCategoryOptionRecord & { category?: { id: number; name: string } };
 
-// Bentuk 1 (serve)
 type ServePayload = {
   currentPage: string | number;
   perPage: string | number;
@@ -36,7 +35,6 @@ type ListResponseServe = {
   data?: { serve: ServePayload };
 };
 
-// Bentuk 2 (status + data + meta)
 type MetaPayload = { total: number; perPage: number; currentPage: number };
 type ListResponseMeta = {
   data?: { status?: boolean; message?: string; data: Row[]; meta: MetaPayload };
@@ -64,17 +62,14 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
   const [current, setCurrent] = React.useState<ProfileCategoryOptionRecord | false>(false);
 
   React.useEffect(() => {
-    // jika ada categoryId, ambil banyak data sekaligus agar bisa filter di client
     const pageCfg: TablePaginationConfig = categoryId
       ? { current: 1, pageSize: 9999, total: 0 }
       : pagination;
 
     fetchList(params, pageCfg);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);
 
   const parseListResponse = (resp: ListResponseServe & ListResponseMeta) => {
-    // 1) Model "serve"
     const serve = (resp as ListResponseServe)?.data?.serve;
     if (serve) {
       return {
@@ -86,7 +81,6 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
         },
       };
     }
-    // 2) Model "data + meta"
     const r2 = (resp as ListResponseMeta)?.data;
     if (r2 && Array.isArray(r2.data) && r2.meta) {
       return {
@@ -115,7 +109,6 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
       if (q.active_only) qs.set("active_only", "true");
       if (q.trashed_only) qs.set("trashed_only", "true");
 
-      // jika ada categoryId → minta page besar untuk filter di client
       const effectivePageSize = categoryId ? 9999 : page?.pageSize ?? pagination.pageSize;
       const effectivePage = categoryId ? 1 : page?.current ?? pagination.current;
 
@@ -147,7 +140,6 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
   };
 
   const handleTableChange: TableProps<Row>["onChange"] = (page) => {
-    // jika categoryId diberikan, pagination server-side tidak dipakai
     if (categoryId) {
       setPagination((prev) => ({ ...prev, current: page.current, pageSize: page.pageSize }));
       return;
@@ -171,7 +163,7 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
       : {
           title: "Category",
           dataIndex: ["category", "name"],
-          render: () => <Tag>Current</Tag>, // jika sudah difilter by category, kolom ini tidak terlalu penting
+          render: () => <Tag>Current</Tag>,
           responsive: ["md"],
         },
     { title: "Label", dataIndex: "label" },
@@ -210,7 +202,6 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
                 optimisticRemove(record.id);
                 message.success("Deleted");
                 if (!categoryId) {
-                  // sinkron server pagination
                   fetchList(params, pagination);
                 }
               } catch (e: any) {
@@ -257,7 +248,7 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
 
             <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
               <Search
-                placeholder="Search label…"
+                placeholder="Search Profile Category Option"
                 allowClear
                 onSearch={(val) => {
                   const next = { ...params, q: val };
@@ -307,7 +298,6 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
           handleClose={() => {
             setOpen(false);
             setCurrent(false);
-            // jika embed by category → minta ulang (client filter)
             if (categoryId) {
               fetchList(params, { current: 1, pageSize: 9999 });
             } else {

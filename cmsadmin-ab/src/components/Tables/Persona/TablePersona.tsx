@@ -113,7 +113,6 @@ const TablePersona: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<PersonaRecord>["onChange"] = (page) => {
@@ -181,7 +180,7 @@ const TablePersona: React.FC = () => {
             className="flex align-center mt-2"
           >
             <Search
-              placeholder="Search data"
+              placeholder="Search Persona"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

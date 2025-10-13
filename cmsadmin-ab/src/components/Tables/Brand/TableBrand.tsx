@@ -142,7 +142,6 @@ const TableBrand: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<BrandRecord>["onChange"] = (page) => {
@@ -208,7 +207,7 @@ const TableBrand: React.FC = () => {
 
           <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
             <Search
-              placeholder="Search brand"
+              placeholder="Search Brand"
               onSearch={(val) => {
                 const next: QueryParams = { q: val };
                 setParams(next);

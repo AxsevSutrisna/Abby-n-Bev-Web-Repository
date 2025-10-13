@@ -1,4 +1,3 @@
-// src/components/Tables/Tag/TableTag.tsx
 import React from "react";
 import {
   Table,
@@ -15,7 +14,6 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormTag from "../../Forms/Tag/FormTag";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 type TagRecord = {
   id: number | string;
   name: string;
@@ -45,7 +43,6 @@ type ColumnsCtx = {
   setCurrent: (rec: TagRecord | false) => void;
 };
 
-/** ===== Columns ===== */
 const columns = (props: ColumnsCtx): ColumnsType<TagRecord> => [
   {
     title: "Name",
@@ -114,7 +111,6 @@ const TableTag: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<TagRecord>["onChange"] = (page) => {
@@ -182,7 +178,7 @@ const TableTag: React.FC = () => {
             className="flex align-center mt-2"
           >
             <Search
-              placeholder="Search data"
+              placeholder="Search Tag"
               onSearch={(val) => {
                 const next: QueryParams = { name: val };
                 setParams(next);

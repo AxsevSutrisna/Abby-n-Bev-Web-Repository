@@ -16,7 +16,6 @@ import http from "../../../api/http";
 import FormConcernOption from "../../Forms/Concern/FormConcernOption";
 import type { ConcernOptionRecord } from "../../Forms/Concern/FormConcernOption";
 
-/** ===== Types ===== */
 type QueryParams = { q?: string; concern_id?: number };
 type Row = ConcernOptionRecord & { concern?: { id: number; name: string } };
 
@@ -34,7 +33,6 @@ type ListResponse = {
 const { Search } = Input;
 
 type Props = {
-  /** optional — jika diisi, tabel hanya menampilkan option untuk concern tsb */
   concernId?: number;
   concernName?: string;
 };
@@ -59,7 +57,6 @@ const TableConcernOption: React.FC<Props> = ({ concernId }) => {
 
   React.useEffect(() => {
     fetchList({ ...params, concern_id: concernId }, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [concernId]);
 
   const fetchList = async (q: QueryParams = params, page?: TablePaginationConfig) => {
@@ -121,7 +118,7 @@ const TableConcernOption: React.FC<Props> = ({ concernId }) => {
         title: "#",
         width: 170,
         align: "center",
-        render: (_: unknown, record: Row) => (      // ⬅️ beri tipe di sini
+        render: (_: unknown, record: Row) => (
         <Space>
             <Button
             type="primary"
@@ -186,7 +183,7 @@ const TableConcernOption: React.FC<Props> = ({ concernId }) => {
 
             <Space style={{ marginLeft: "auto" }} className="flex align-center mt-2">
               <Search
-                placeholder="Search name…"
+                placeholder="Search Concern Option"
                 allowClear
                 onSearch={(val) => {
                   const next = { ...params, q: val };

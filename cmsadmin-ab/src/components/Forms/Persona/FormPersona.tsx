@@ -3,7 +3,6 @@ import { Form, Input, Button } from "antd";
 import type { FormInstance } from "antd";
 import http from "../../../api/http";
 
-/** ==== Types ==== */
 type PersonaRecord = {
   id: number | string;
   name: string;
@@ -27,7 +26,6 @@ const FormPersona: React.FC<FormPersonaPropss> = ({ data, handleClose }) => {
   const onFinish = async (values: FormValues) => {
     try {
       if (data) {
-        // UPDATE
         const res = await http.put(`/admin/personas/${data.slug}`, {
           name: values.name,
         });
@@ -36,7 +34,6 @@ const FormPersona: React.FC<FormPersonaPropss> = ({ data, handleClose }) => {
           handleClose();
         }
       } else {
-        // CREATE
         const res = await http.post("/admin/personas", {
           name: values.name,
         });
@@ -46,7 +43,6 @@ const FormPersona: React.FC<FormPersonaPropss> = ({ data, handleClose }) => {
         }
       }
     } catch (err) {
-      // optional: message.error(...)
       console.error("Save persona failed:", err);
     }
   };
@@ -61,7 +57,7 @@ const FormPersona: React.FC<FormPersonaPropss> = ({ data, handleClose }) => {
   };
 
   React.useEffect(() => {
-    form.setFieldsValue(init); // <= sekarang tipe cocok (Partial<FormValues>)
+    form.setFieldsValue(init);
   }, [data, form, init.id, init.name]);
 
   return (

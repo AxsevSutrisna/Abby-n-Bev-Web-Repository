@@ -12,6 +12,7 @@ import {
   Divider,
   message,
 } from "antd";
+import type { RuleObject } from "antd/es/form";
 import dayjs, { Dayjs } from "dayjs";
 import http from "../../../api/http";
 
@@ -47,8 +48,8 @@ type FormValues = {
   title?: string;
   description?: string;
   has_button?: boolean;
-  button_text?: string;
-  button_url?: string;
+  button_text?: string | null;
+  button_url?: string | null;
   start_datetime: Dayjs;
   end_datetime: Dayjs;
   is_publish?: boolean;
@@ -60,23 +61,19 @@ const BASE_URL = "/admin/flashsales";
 
 const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
   const [form] = Form.useForm<FormValues>();
-  const isCreate = !data?.id;
   const [loading, setLoading] = React.useState(false);
-
-  // product options for select
+  const hasButton = Form.useWatch("has_button", form);
   const [productOptions, setProductOptions] = React.useState<
     Array<{ value: number; label: string }>
   >([]);
 
   const loadProducts = React.useCallback(async (q?: string) => {
     try {
-      // sesuaikan jika endpoint produk berbeda
       const resp = await http.get(
         `/admin/products?q=${encodeURIComponent(q ?? "")}&page=1&per_page=50`
       );
       const list = resp?.data?.serve?.data ?? resp?.data?.serve ?? [];
-      const opts = list.map((p: any) => ({ value: p.id, label: p.name }));
-      setProductOptions(opts);
+      setProductOptions(list.map((p: any) => ({ value: p.id, label: p.name })));
     } catch {
       /* ignore */
     }
@@ -92,8 +89,8 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
         title: "",
         description: "",
         has_button: false,
-        button_text: "",
-        button_url: "",
+        button_text: null,
+        button_url: null,
         start_datetime: dayjs(),
         end_datetime: dayjs().add(1, "day"),
         is_publish: false,
@@ -101,13 +98,12 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
       });
       return;
     }
-
     form.setFieldsValue({
       title: data.title ?? "",
       description: data.description ?? "",
       has_button: Boolean(data.hasButton),
-      button_text: data.buttonText ?? "",
-      button_url: data.buttonUrl ?? "",
+      button_text: data.buttonText ?? null,
+      button_url: data.buttonUrl ?? null,
       start_datetime: dayjs(data.startDatetime),
       end_datetime: dayjs(data.endDatetime),
       is_publish: Boolean(data.isPublish),
@@ -120,38 +116,45 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
     });
   }, [data, form]);
 
+  React.useEffect(() => {
+    if (hasButton === false) {
+      form.setFieldsValue({ button_text: null, button_url: null });
+      form.validateFields(["button_text", "button_url"]);
+    }
+  }, [hasButton, form]);
+  const validateEndAfterStart = (_: RuleObject, value?: Dayjs) => {
+    const start = form.getFieldValue("start_datetime");
+    if (!value || !start) return Promise.resolve();
+    return value.isAfter(start)
+      ? Promise.resolve()
+      : Promise.reject(new Error("End Date must be after Start Date"));
+  };
+
   const onFinish = async (values: FormValues) => {
     try {
       setLoading(true);
-      if (!values.products || values.products.length === 0) {
-        message.error("Minimal 1 produk untuk Flash Sale.");
-        setLoading(false);
-        return;
-      }
 
       const payload = {
         title: values.title || null,
         description: values.description || null,
-        has_button: values.has_button ?? false,
-        button_text: values.button_text || null,
-        button_url: values.button_url || null,
+        has_button: !!values.has_button,
+        button_text: values.has_button ? values.button_text || null : null,
+        button_url: values.has_button ? values.button_url || null : null,
         start_datetime: values.start_datetime.format(DATE_FMT),
         end_datetime: values.end_datetime.format(DATE_FMT),
-        is_publish: values.is_publish ?? false,
-        products: values.products.map((p) => ({
+        is_publish: !!values.is_publish,
+        products: (values.products ?? []).map((p) => ({
           product_id: p.product_id,
           flash_price: Number(p.flash_price),
           stock: Number(p.stock),
-        })) as FlashSaleProductInput[],
+        })),
       };
 
       if (data?.id) {
         await http.put(`${BASE_URL}/${data.id}`, payload);
         message.success("Flash Sale updated");
       } else {
-        await http.post(BASE_URL, payload, {
-          headers: { "Content-Type": "application/json" },
-        });
+        await http.post(BASE_URL, payload, { headers: { "Content-Type": "application/json" } });
         message.success("Flash Sale created");
       }
 
@@ -169,11 +172,7 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
       <Form.Item
         label="Title"
         name="title"
-        rules={
-          isCreate
-            ? [{ required: true, message: "Title is required" }]
-            : undefined
-        }
+        rules={[{ required: true, message: "Title is required" }]}
       >
         <Input placeholder="Flash sale title" />
       </Form.Item>
@@ -191,14 +190,30 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
         </Form.Item>
       </Space>
 
-      <Space size="middle" style={{ display: "flex" }}>
-        <Form.Item label="Button Text" name="button_text" style={{ flex: 1 }}>
-          <Input placeholder="e.g. Shop Now (optional)" />
-        </Form.Item>
-        <Form.Item label="Button URL" name="button_url" style={{ flex: 1 }}>
-          <Input placeholder="https://example.com (optional)" />
-        </Form.Item>
-      </Space>
+      {}
+      {hasButton ? (
+        <Space size="middle" style={{ display: "flex" }}>
+          <Form.Item
+            label="Button Text"
+            name="button_text"
+            rules={[{ required: true, message: "Button Text is required" }]}
+            style={{ flex: 1 }}
+          >
+            <Input placeholder="e.g. Shop Now" />
+          </Form.Item>
+          <Form.Item
+            label="Button URL"
+            name="button_url"
+            rules={[
+              { required: true, message: "Button URL is required" },
+              { type: "url", message: "Please enter a valid URL" },
+            ]}
+            style={{ flex: 1 }}
+          >
+            <Input placeholder="https://example.com" />
+          </Form.Item>
+        </Space>
+      ) : null}
 
       <Space size="middle" style={{ display: "flex" }}>
         <Form.Item
@@ -213,21 +228,11 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
         <Form.Item
           label="End Date"
           name="end_datetime"
-          style={{ flex: 1 }}
           rules={[
             { required: true, message: "End date is required" },
-            // End > Start
-            ({ getFieldValue }) => ({
-              validator(_, value: Dayjs) {
-                const start = getFieldValue("start_datetime") as Dayjs | undefined;
-                if (!value || !start) return Promise.resolve();
-                if (value.isAfter(start)) return Promise.resolve();
-                return Promise.reject(
-                  new Error("End date must be after Start date")
-                );
-              },
-            }),
+            { validator: validateEndAfterStart },
           ]}
+          style={{ flex: 1 }}
         >
           <DatePicker showTime style={{ width: "100%" }} format={DATE_FMT} />
         </Form.Item>
@@ -239,9 +244,11 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
         name="products"
         rules={[
           {
-            validator: async (_, list?: FlashSaleProductInput[]) => {
-              if (Array.isArray(list) && list.length > 0) return Promise.resolve();
-              return Promise.reject(new Error("Minimal 1 produk"));
+            validator: async (_, list) => {
+              if (!list || list.length < 1) {
+                return Promise.reject(new Error("At least 1 product is required"));
+              }
+              return Promise.resolve();
             },
           },
         ]}
@@ -273,7 +280,33 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
                     name={[field.name, "flash_price"]}
                     rules={[{ required: true, message: "Flash price is required" }]}
                   >
-                    <InputNumber min={1} style={{ width: 160 }} />
+                    <InputNumber
+                      min={1}
+                      precision={0}
+                      style={{ width: 180 }}
+                      formatter={(v) => {
+                        if (v === undefined || v === null) return "";
+                        const s = String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return `Rp ${s}`;
+                      }}
+                      parser={(v: string | undefined) => {
+                        const cleaned = (v ?? "").toString().replace(/[^0-9]/g, "");
+                        const n = Number(cleaned);
+                        return Number.isNaN(n) ? 0 : n;
+                      }}
+                      onKeyPress={(e) => {
+                      if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    onPaste={(e) => {
+                      // Cegah paste teks non-numerik
+                      const text = e.clipboardData.getData("text");
+                      if (!/^\d+$/.test(text)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    />
                   </Form.Item>
 
                   <Form.Item

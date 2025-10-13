@@ -244,7 +244,7 @@ const TableAdmin: React.FC = () => {
             className="flex align-center mt-2"
           >
             <Search
-              placeholder="Search data"
+              placeholder="Search Admin"
               onSearch={(e) => {
                 const nextParams: QueryParams = {
                   name: e,
