@@ -10,7 +10,6 @@ function LoginPage() {
           alignItems: "center",
           gap: 10,
           marginBottom: 30,
-          justifyContent: "center",
         }}
       >
         <img
@@ -32,7 +31,6 @@ function LoginPage() {
         style={{
           fontSize: 20,
           fontWeight: "bold",
-          textAlign: "center",
           marginBottom: 10,
         }}
       >
@@ -44,7 +42,6 @@ function LoginPage() {
           fontSize: 12,
           color: "#404040",
           marginBottom: 20,
-          textAlign: "center",
         }}
       >
         Welcome back! Please sign in with the account you’ve registered

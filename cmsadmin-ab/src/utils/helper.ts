@@ -14,7 +14,7 @@ export interface SessionUser {
   id: number | string;
   name: string;
   email?: string;
-  role?: number;
+  role?: RoleEnumType;
   role_name?: string;
 }
 
@@ -24,14 +24,7 @@ export interface SessionData {
   [key: string]: any;
 }
 
-/**
- * Helper functions
- */
 const helper = {
-  /**
-   * Ambil data session user dari localStorage.
-   * Kalau tidak ada / invalid → return null
-   */
   isAuthenticated(): SessionData | null {
     const session = localStorage.getItem("session");
     if (session) {
@@ -47,32 +40,23 @@ const helper = {
     return null;
   },
 
-  /**
-   * Type guard → memastikan data itu SessionData, bukan null
-   */
   isSessionData(data: SessionData | null): data is SessionData {
     return data !== null;
   },
 
-  /**
-   * Potong string dengan maksimal karakter tertentu
-   */
   truncString(str: string, max: number, add: string = "..."): string {
     return typeof str === "string" && str.length > max
       ? str.substring(0, max) + add
       : str;
   },
 
-  /**
-   * Format angka jadi Rupiah
-   */
   formatRupiah(angka: number | string, prefix?: string): string {
     const number_string = angka ? angka.toString().replace(/[^,\d]/g, "") : "";
 
     const split = number_string.split(",");
     const sisa = split[0].length % 3;
-    let rupiah = split[0].substr(0, sisa);
-    const ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+    let rupiah = split[0].substring(0, sisa);
+    const ribuan = split[0].substring(sisa).match(/\d{3}/gi);
 
     if (ribuan) {
       const separator = sisa ? "." : "";
@@ -81,6 +65,16 @@ const helper = {
 
     rupiah = split[1] !== undefined ? rupiah + "," + split[1] : rupiah;
     return prefix === undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+  },
+
+  hasAnyPermission(
+    roleId: RoleEnumType | undefined,
+    allowedRoles: RoleEnumType[]
+  ): boolean {
+    if (!roleId) return false;
+    if (roleId === RoleEnum.ADMINISTRATOR) return true;
+
+    return allowedRoles.includes(roleId);
   },
 
   RoleEnum,

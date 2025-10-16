@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// Attach token ke setiap request
 api.interceptors.request.use((config) => {
   const session = localStorage.getItem("session");
   if (session) {
@@ -24,7 +23,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401
 api.interceptors.response.use(
   (response) => response,
   (error) => {

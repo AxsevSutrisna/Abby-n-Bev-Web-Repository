@@ -16,7 +16,6 @@ const BlankCacheComponent: FC<BlankCacheComponentProps> = ({
     if (!isLatestVersion) {
       emptyCacheStorage()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLatestVersion])
 
   return (
