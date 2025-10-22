@@ -19,6 +19,7 @@ import FormBanner from "../../Forms/Banner/FormBanner";
 import http from "../../../api/http";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { getImageUrl } from "../../../utils/asset";
 
 type BannerRecord = {
   id: number | string;
@@ -64,34 +65,28 @@ const columns = (props: ColumnsCtx): ColumnsType<BannerRecord> => [
   },
   {
     title: "Image",
-    dataIndex: "image_url",
-    render: (text: string | undefined, row) => {
-      if (!row.image) return "No Image";
-      const extension = row.image.split(".").pop()?.toLowerCase();
-      if (extension === "mp4") {
-        return <video width={150} src={text} controls />;
+    render: (_: unknown, row) => {
+      const src = getImageUrl(row.image_url || row.image || "");
+      if (!src) return "No Image";
+
+      const ext = src.split("?")[0].split(".").pop()?.toLowerCase();
+      if (ext === "mp4") {
+        return <video width={150} src={src} controls />;
       }
-      return text ? (
-        <img src={text} alt="banner" style={{ width: 50 }} />
-      ) : (
-        "No Image"
-      );
+      return <img src={src} alt="banner" style={{ width: 50, objectFit: "contain" }} />;
     },
   },
   {
     title: "Image Mobile",
-    dataIndex: "image_mobile_url",
-    render: (text: string | undefined, row) => {
-      if (!row.imageMobile) return "No Image";
-      const extension = row.imageMobile.split(".").pop()?.toLowerCase();
-      if (extension === "mp4") {
-        return <video width={150} src={text} controls />;
+    render: (_: unknown, row) => {
+      const src = getImageUrl(row.image_mobile_url || row.imageMobile || "");
+      if (!src) return "No Image";
+
+      const ext = src.split("?")[0].split(".").pop()?.toLowerCase();
+      if (ext === "mp4") {
+        return <video width={150} src={src} controls />;
       }
-      return text ? (
-        <img src={text} alt="banner-mobile" style={{ width: 75 }} />
-      ) : (
-        "No Image"
-      );
+      return <img src={src} alt="banner-mobile" style={{ width: 75, objectFit: "contain" }} />;
     },
   },
   {

@@ -49,8 +49,11 @@ const FormDiscount: React.FC<FormDiscountProps> = ({ setDiscount, discount }) =>
                 value={discount?.value ?? ""}
                 type="number"
                 suffix="%"
+                min={0}
                 onChange={(e) => {
-                  const val = e.target.value;
+                  let val = Number(e.target.value);
+                  if (val < 0) val = 0;
+
                   setDiscount({
                     ...discount,
                     value: val,

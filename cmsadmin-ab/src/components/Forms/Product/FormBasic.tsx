@@ -1,5 +1,6 @@
+// src/components/Forms/Product/FormBasic.tsx
 import React from "react";
-import { Form, Input, Row, Button, Col, Image, message } from "antd";
+import { Form, Input, Row, Button, Col, Image, message, Select } from "antd";
 import type { FormInstance } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import http from "../../../api/http";
@@ -16,7 +17,49 @@ type FormBasicProps = {
   form: FormInstance<any>;
 };
 
+type CategoryNode = {
+  id: number;
+  name: string;
+  children?: CategoryNode[];
+};
+
+type FlatCategory = { id: number; pathLabel: string };
+
 const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
+  const [categories, setCategories] = React.useState<FlatCategory[]>([]);
+  const [catLoading, setCatLoading] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    // fetch category types (tree) lalu flatten jadi label berjenjang
+    const fetchCategoryTypes = async () => {
+      try {
+        setCatLoading(true);
+        const res = await http.get("/admin/category-types/list");
+        const serve: CategoryNode[] = Array.isArray(res?.data?.serve)
+          ? res.data.serve
+          : [];
+
+        const out: FlatCategory[] = [];
+        const walk = (node: CategoryNode, prefix: string[] = []) => {
+          const path = [...prefix, node.name];
+          out.push({ id: node.id, pathLabel: path.join(" / ") });
+          if (Array.isArray(node.children)) {
+            node.children.forEach((c) => walk(c, path));
+          }
+        };
+        serve.forEach((n) => walk(n));
+        setCategories(out);
+      } catch (e) {
+        console.error("Failed to load category types", e);
+        setCategories([]);
+      } finally {
+        setCatLoading(false);
+      }
+    };
+
+    fetchCategoryTypes();
+  }, []);
+
   const handleUploadClick = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -71,7 +114,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
 
   return (
     <>
-      {}
+      {/* Title (required) */}
       <Form.Item
         label="Title"
         name="name"
@@ -80,7 +123,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         <Input />
       </Form.Item>
 
-      {}
+      {/* Master SKU (optional) */}
       <Form.Item
         label="Master SKU"
         name="master_sku"
@@ -89,12 +132,33 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         <Input placeholder="e.g. PRD-001" />
       </Form.Item>
 
-      {}
+      {/* Category Type (required) */}
+      <Form.Item
+        label="Category Type"
+        name="category_type_id"
+        rules={[{ required: true, message: "Category type is required." }]}
+      >
+        <Select
+          placeholder="Please select Category Type"
+          loading={catLoading}
+          showSearch
+          optionFilterProp="children"
+          allowClear
+        >
+          {categories.map((c) => (
+            <Select.Option key={c.id} value={c.id}>
+              {c.pathLabel}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+      {/* Description (optional) */}
       <Form.Item label="Description" name="description">
         <Input.TextArea rows={4} placeholder="Product description (optional)" />
       </Form.Item>
 
-      {}
+      {/* Media */}
       <Form.Item label="Media (10 file max)">
         <Row gutter={[12, 12]} align="middle">
           {medias.length > 0 &&
@@ -165,7 +229,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         </Row>
       </Form.Item>
 
-      {}
+      {/* Base Price */}
       <Form.Item
         label="Base Price"
         name="base_price"
@@ -179,13 +243,35 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         />
       </Form.Item>
 
-      {}
+      {/* Weight (non-negative) */}
       <Form.Item
         label="Weight"
         name="weight"
-        rules={[{ required: true, message: "Weight required." }]}
+        rules={[
+          { required: true, message: "Weight required." },
+          {
+            validator: (_,_value) => {
+              const value = Number(_value);
+              return value < 0
+                ? Promise.reject("Weight cannot be negative.")
+                : Promise.resolve();
+            },
+          },
+        ]}
       >
-        <Input type="number" suffix="g" inputMode="numeric" placeholder="0" />
+        <Input
+          type="number"
+          suffix="g"
+          inputMode="numeric"
+          placeholder="0"
+          min={0}
+          onChange={(e) => {
+            const val = Number(e.target.value);
+            if (val < 0) {
+              form.setFieldsValue({ weight: 0 });
+            }
+          }}
+        />
       </Form.Item>
     </>
   );

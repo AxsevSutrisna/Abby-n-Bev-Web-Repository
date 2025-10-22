@@ -170,8 +170,7 @@ const AddProductPage: React.FC = () => {
     const toNumber = (v: any) => Number(String(v ?? "").replace(/\./g, "")) || 0;
     const toIsoOrNull = (v?: string | null) => (v ? v : null);
     const tag_ids = values.tag_id ? [values.tag_id] : [];
-    const discounts = discount?.value
-        ? [
+    const discounts = discount?.value? [
             {
             type: discount.type,
             value:
