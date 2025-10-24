@@ -82,7 +82,7 @@ const columns = (props: ColumnsCtx): ColumnsType<BrandRecord> => [
     title: "Status",
     dataIndex: "isActive",
     render: (val?: number) =>
-      val === 1 ? <Tag color="blue">ACTIVE</Tag> : <Tag color="red">INACTIVE</Tag>,
+      val === 1 ? <Tag color="#41BA2D">Active</Tag> : <Tag color="#FF3434">Inactive</Tag>,
     align: "center",
     width: 140,
   },

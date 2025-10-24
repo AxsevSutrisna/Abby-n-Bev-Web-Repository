@@ -173,7 +173,7 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
       dataIndex: "isActive",
       width: 100,
       align: "center",
-      render: (v?: boolean) => (v ? <Tag color="blue">Active</Tag> : <Tag>Inactive</Tag>),
+      render: (v?: boolean) => (v ? <Tag color="#41BA2D">Active</Tag> : <Tag color="#FF3434">Inactive</Tag>),
       responsive: ["md"],
     },
     {

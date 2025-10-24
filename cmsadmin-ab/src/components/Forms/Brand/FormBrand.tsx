@@ -131,7 +131,15 @@ const FormBrand: React.FC<FormBrandProps> = ({ data, handleClose, fetch }) => {
 
       <Form.Item label="Active" name="isActive" valuePropName="checked">
         {}
-        <Switch checkedChildren="Active" unCheckedChildren="Inactive" />
+        <Switch
+          checkedChildren="Active"
+          unCheckedChildren="Inactive"
+          style={{
+            fontSize: 12,
+            fontWeight: 500,
+            color: "#fff",
+          }}
+        />
       </Form.Item>
 
       <Form.Item>
