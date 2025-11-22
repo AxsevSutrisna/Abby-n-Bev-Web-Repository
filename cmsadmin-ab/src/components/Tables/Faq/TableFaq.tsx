@@ -14,7 +14,6 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormFAQ from "../../Forms/Faq/FormFaq";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 type FAQRecord = {
   id: number | string;
   question: string;
@@ -44,7 +43,6 @@ type ColumnsCtx = {
   setCurrent: (rec: FAQRecord | false) => void;
 };
 
-/** ===== Columns ===== */
 const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
   {
     title: "Question",
@@ -102,7 +100,6 @@ const columns = (props: ColumnsCtx): ColumnsType<FAQRecord> => [
   },
 ];
 
-/** ===== Table Component ===== */
 const TableFaq: React.FC = () => {
   const [data, setData] = React.useState<FAQRecord[]>([]);
   const [params, setParams] = React.useState<QueryParams>({ name: "" });

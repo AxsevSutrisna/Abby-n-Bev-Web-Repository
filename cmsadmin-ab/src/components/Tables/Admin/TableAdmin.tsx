@@ -156,7 +156,6 @@ const TableAdmin: React.FC = () => {
 
   React.useEffect(() => {
     fetchList(params, pagination);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleTableChange: TableProps<AdminRecord>["onChange"] = (page) => {

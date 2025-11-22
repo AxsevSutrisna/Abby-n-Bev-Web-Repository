@@ -1,4 +1,3 @@
-// src/components/Forms/Product/FormCategory.tsx
 import React from "react";
 import { Form, Select } from "antd";
 import http from "../../../api/http";
@@ -22,8 +21,6 @@ const fetchAllPages = async <T,>(path: string, perPage = 100): Promise<T[]> => {
     const res = await http.get(url);
     const d = res?.data;
     const serve = d?.serve;
-
-    // Ambil item dari berbagai bentuk respons:
     const items: T[] =
       Array.isArray(serve?.data) ? (serve.data as T[]) :
       Array.isArray(serve)      ? (serve as T[]) :
@@ -78,7 +75,6 @@ const FormCategory: React.FC = () => {
         setConcernOptions(concernsAll);
         setProfileCategoryOptions(profileOptsAll);
       } catch (e) {
-        // fallback aman
         setTags([]);
         setBrands([]);
         setPersonas([]);
@@ -97,7 +93,7 @@ const FormCategory: React.FC = () => {
         Organization
       </div>
 
-      {/* Status */}
+      {}
       <Form.Item
         label="Status"
         name="status"
@@ -110,7 +106,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Flashsale */}
+      {}
       <Form.Item
         label="Flashsale"
         name="is_flashsale"
@@ -122,7 +118,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Tag */}
+      {}
       <Form.Item
         label="Tag"
         name="tag_id"
@@ -143,7 +139,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Brand */}
+      {}
       <Form.Item
         label="Brand"
         name="brand_id"
@@ -164,7 +160,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Persona */}
+      {}
       <Form.Item
         label="Persona"
         name="persona_id"
@@ -185,7 +181,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Concern Options (multiple) */}
+      {}
       <Form.Item
         label="Concern Options"
         name="concern_option_ids"
@@ -207,7 +203,7 @@ const FormCategory: React.FC = () => {
         </Select>
       </Form.Item>
 
-      {/* Profile Category Options (multiple) */}
+      {}
       <Form.Item
         label="Profile Category Options"
         name="profile_category_option_ids"

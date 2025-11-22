@@ -32,7 +32,7 @@ const TransactionChart: React.FC = () => {
           (item: any) => ({
             Date:
               selectedPeriod === "daily"
-                ? item.date.split("-")[2] // ambil hari dari format YYYY-MM-DD
+                ? item.date.split("-")[2]
                 : item.monthName,
             Total: item.total,
           })

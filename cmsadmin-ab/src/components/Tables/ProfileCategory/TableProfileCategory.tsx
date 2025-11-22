@@ -252,7 +252,7 @@ const TableProfileCategory: React.FC = () => {
         onChange={handleTableChange}
       />
 
-      {/* Modal Create/Edit */}
+      {}
       <Modal
         centered
         open={open}
@@ -274,7 +274,7 @@ const TableProfileCategory: React.FC = () => {
         />
       </Modal>
 
-      {/* Modal Options */}
+      {}
       <Modal
         open={drawerOpen}
         onCancel={() => {
@@ -290,7 +290,7 @@ const TableProfileCategory: React.FC = () => {
         }
         destroyOnClose
       >
-        {/* Aktifkan jika komponen sudah dibuat */}
+        {}
         {drawerCategory && (
           <TableProfileCategoryOption
             categoryId={drawerCategory.id}

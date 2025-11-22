@@ -28,8 +28,6 @@ const FormAboutUs: React.FC = () => {
       message.error("Failed to load About Us data");
     }
   };
-
-  /** ===== Submit Form ===== */
   const onFinish = async (values: AboutUsData): Promise<void> => {
     try {
       const res = await http.post("/admin/about-us", values, {

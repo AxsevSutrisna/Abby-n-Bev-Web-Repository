@@ -1,4 +1,3 @@
-// src/components/Forms/Product/FormBasic.tsx
 import React from "react";
 import { Form, Input, Row, Button, Col, Image, message, Select } from "antd";
 import type { FormInstance } from "antd";
@@ -30,7 +29,6 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
   const [catLoading, setCatLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    // fetch category types (tree) lalu flatten jadi label berjenjang
     const fetchCategoryTypes = async () => {
       try {
         setCatLoading(true);
@@ -114,7 +112,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
 
   return (
     <>
-      {/* Title (required) */}
+      {}
       <Form.Item
         label="Title"
         name="name"
@@ -123,7 +121,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         <Input />
       </Form.Item>
 
-      {/* Master SKU (optional) */}
+      {}
       <Form.Item
         label="Master SKU"
         name="master_sku"
@@ -132,7 +130,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         <Input placeholder="e.g. PRD-001" />
       </Form.Item>
 
-      {/* Category Type (required) */}
+      {}
       <Form.Item
         label="Category Type"
         name="category_type_id"
@@ -153,12 +151,12 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         </Select>
       </Form.Item>
 
-      {/* Description (optional) */}
+      {}
       <Form.Item label="Description" name="description">
         <Input.TextArea rows={4} placeholder="Product description (optional)" />
       </Form.Item>
 
-      {/* Media */}
+      {}
       <Form.Item label="Media (10 file max)">
         <Row gutter={[12, 12]} align="middle">
           {medias.length > 0 &&
@@ -229,7 +227,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         </Row>
       </Form.Item>
 
-      {/* Base Price */}
+      {}
       <Form.Item
         label="Base Price"
         name="base_price"
@@ -243,7 +241,7 @@ const FormBasic: React.FC<FormBasicProps> = ({ medias, setMedias, form }) => {
         />
       </Form.Item>
 
-      {/* Weight (non-negative) */}
+      {}
       <Form.Item
         label="Weight"
         name="weight"

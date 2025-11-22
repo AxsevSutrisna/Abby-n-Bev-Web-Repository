@@ -14,7 +14,6 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import FormPersona from "../../Forms/Persona/FormPersona";
 import http from "../../../api/http";
 
-/** ===== Types ===== */
 type PersonaRecord = {
   id: number | string;
   name: string;
@@ -44,7 +43,6 @@ type ColumnsCtx = {
   setCurrent: (rec: PersonaRecord | false) => void;
 };
 
-/** ===== Columns ===== */
 const columns = (props: ColumnsCtx): ColumnsType<PersonaRecord> => [
   {
     title: "Name",

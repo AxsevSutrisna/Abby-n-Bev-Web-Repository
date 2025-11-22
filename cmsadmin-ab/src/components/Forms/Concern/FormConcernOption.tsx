@@ -48,7 +48,7 @@ const FormConcernOption: React.FC<FormConcernOptionProps> = ({
           }))
         );
       } catch {
-        /* ignore */
+        message.error("Failed to load concern choices");
       }
     })();
   }, [concernId]);

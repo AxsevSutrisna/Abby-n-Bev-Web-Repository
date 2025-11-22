@@ -1,4 +1,3 @@
-// src/components/Tables/Activity/TableActivityLog.tsx
 import React from "react";
 import { Table, Button, Input, Card, Select, Modal, Col, Row, Space } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -141,7 +140,7 @@ const TableActivityLog: React.FC = () => {
             <span style={{ fontSize: 12 }}>entries</span>
           </div>
 
-          {/* Tambahkan Search Bar */}
+          {}
           <Space style={{ marginLeft: "auto" }}>
             <Search
               placeholder="Search activity"

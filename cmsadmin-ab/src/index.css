@@ -431,7 +431,7 @@ a:hover {
 }
 
 .ant-switch {
-  background-color: #d9d9d9 !important; /* default inactive */
+  background-color: #d9d9d9 !important; 
   border-radius: 16px !important;
   height: 22px !important;
   min-width: 42px !important;
@@ -439,11 +439,11 @@ a:hover {
 }
 
 .ant-switch-checked {
-  background-color: var(--ant-primary-color) !important; /* #9B3C6C */
+  background-color: var(--ant-primary-color) !important; 
 }
 
 .ant-switch:hover:not(.ant-switch-disabled).ant-switch-checked {
-  background-color: var(--ant-primary-color-hover) !important; /* #C53D7F */
+  background-color: var(--ant-primary-color-hover) !important; 
 }
 
 .ant-switch-handle::before {

@@ -75,7 +75,7 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
       const list = resp?.data?.serve?.data ?? resp?.data?.serve ?? [];
       setProductOptions(list.map((p: any) => ({ value: p.id, label: p.name })));
     } catch {
-      /* ignore */
+      message.error("Failed to load products");
     }
   }, []);
 
@@ -300,7 +300,6 @@ const FormFlashSale: React.FC<Props> = ({ data, handleClose }) => {
                       }
                     }}
                     onPaste={(e) => {
-                      // Cegah paste teks non-numerik
                       const text = e.clipboardData.getData("text");
                       if (!/^\d+$/.test(text)) {
                         e.preventDefault();

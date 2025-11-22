@@ -117,7 +117,7 @@ const TableUserCart: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          {/* Page Size Selector */}
+          {}
           <div className="flex align-center">
             <span style={{ fontSize: 12 }}>Show</span>
             <Select
@@ -141,7 +141,7 @@ const TableUserCart: React.FC = () => {
             <span style={{ fontSize: 12 }}>entries</span>
           </div>
 
-          {/* Search */}
+          {}
           <div className="flex align-center" style={{ gap: "10px" }}>
             <Input
               placeholder="Search by product name, user name, user email"
@@ -168,7 +168,7 @@ const TableUserCart: React.FC = () => {
         </div>
       </Card>
 
-      {/* Main Table */}
+      {}
       <Table<UserCart>
         style={{ marginTop: 10 }}
         columns={columns()}

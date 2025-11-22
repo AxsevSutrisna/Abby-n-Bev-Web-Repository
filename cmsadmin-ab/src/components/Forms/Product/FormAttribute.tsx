@@ -1,4 +1,3 @@
-// src/components/Forms/Product/FormAttribute.tsx
 import React from "react";
 import Button from "antd/es/button";
 import Input from "antd/es/input";

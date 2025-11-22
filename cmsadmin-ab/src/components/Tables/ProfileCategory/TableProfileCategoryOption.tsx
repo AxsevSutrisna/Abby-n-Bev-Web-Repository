@@ -43,7 +43,6 @@ type ListResponseMeta = {
 const { Search } = Input;
 
 type Props = {
-  /** Opsional — jika diisi, hanya tampilkan option milik category tsb */
   categoryId?: number;
   categoryName?: string;
 };
@@ -218,7 +217,7 @@ const TableProfileCategoryOption: React.FC<Props> = ({ categoryId }) => {
 
   return (
     <>
-      {/* Toolbar hanya muncul jika tidak sedang di-embed oleh kategori tertentu */}
+      {}
       {!categoryId && (
         <Card style={{ marginTop: 10 }}>
           <div className="flex flex-wrap" style={{ width: "100%", alignItems: "flex-end" }}>

@@ -143,7 +143,6 @@ const TableConcern: React.FC = () => {
                 await http.delete(`/admin/concern/${record.slug}`);
                 optimisticRemove(record.slug);
                 message.success("Deleted");
-                // optional sync
                 fetchList(params, pagination);
               } catch (e: any) {
                 message.error(e?.response?.data?.message || "Delete failed");
