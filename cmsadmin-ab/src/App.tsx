@@ -1,14 +1,29 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import LoginPage from "./pages/LoginPage"
-import DashboardPage from "./pages/DashboardPage"
-import ProtectedRoute from "./apps/ProtectedRoutes"
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import ProtectedRoute from "./apps/ProtectedRoutes";
+
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import ForgotPage from "./pages/ForgotPage";
+import MasterPage from "./pages/MasterPage";
+import AddProductPage from "./pages/AddProductPage";
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        {/* Redirect root ke dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+        {/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot" element={<ForgotPage />} />
+
+        {/* Protected routes */}
         <Route
           path="/dashboard"
           element={
@@ -18,19 +33,29 @@ export default function App() {
           }
         />
 
-        {/* contoh tambahan menu users */}
+        {/* Semua route modul CMS */}
         <Route
-          path="/users"
+          path="/*"
           element={
             <ProtectedRoute>
-              <h2 style={{ padding: 20 }}>Users Management Page</h2>
+              <MasterPage />
             </ProtectedRoute>
           }
         />
 
-        {/* Redirect semua yang tidak dikenali ke login */}
-        <Route path="*" element={<LoginPage />} />
+        {/* ✅ Tambahkan route untuk form product */}
+        <Route
+          path="/product-form"
+          element={
+            <ProtectedRoute>
+              <AddProductPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback terakhir */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
-  )
+  );
 }
