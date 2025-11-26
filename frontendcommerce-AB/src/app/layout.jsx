@@ -2,6 +2,8 @@ import { Plus_Jakarta_Sans, Damion } from "next/font/google";
 import "./globals.css";
 import { Navbar, Footer } from "../components";
 import clsx from "clsx";
+import GoogleProvider from "@/components/GoogleProvider";
+import { AuthProvider } from "@/context/AuthContext";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -22,11 +24,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${plusJakarta.variable} ${damion.variable}`}>
-      <body className="font-sans bg-[#f7f7f7]">
-        <Navbar />
-        <main> {children}</main>
-        <Footer />
+      <body className="flex flex-col min-h-screen font-sans bg-[#f7f7f7]">
+        <GoogleProvider>
+          <AuthProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </AuthProvider>
+        </GoogleProvider>
       </body>
     </html>
   );
 }
+console.log("CLIENT_ID:", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);

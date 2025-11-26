@@ -1,8 +1,9 @@
 "use client";
 import { BtnIcon, BtnIconToggle } from ".";
+import { formatDistanceToNow } from "date-fns";
 
 export function BlogCard({
-  date,
+  create_at,
   image,
   imgTitle,
   title,
@@ -21,7 +22,7 @@ export function BlogCard({
         <div className="wrapper-left-content flex space-x-2 items-center">
           <span className="text-sm">Abby n Bev</span>
           <div className="w-1 h-1 rounded-full bg-neutral-400"></div>
-          <span className="text-sm text-neutral400 "> {date} </span>
+          <span className="text-sm text-neutral400 "> {formatDistanceToNow(create_at)} </span>
         </div>
         {/* <BtnIcon variant="tertiary" size="sm" iconName="EllipsisV"/> */}
       </div>
@@ -42,7 +43,7 @@ export function BlogCard({
 
       <div className="flex space-x-4">
         <div className="flex items-center space-x-3">
-          <BtnIconToggle variant="tertiary" size="sm" iconName="ThumbsUp" />
+          <BtnIconToggle variant="tertiary" size="sm" iconName="ThumbsUp" > </BtnIconToggle>
           <p className="text-sm">{like}</p>
         </div>
         <div className="flex items-center space-x-3">
