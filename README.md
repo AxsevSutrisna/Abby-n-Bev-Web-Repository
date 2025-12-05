@@ -1,7 +1,6 @@
 # Abby n Bev — Omnichannel Beauty Commerce Platform
 
-Abby n Bev Web Repository adalah ekosistem digital untuk E-commerce dan Transaksi secara Offline dari brand Abby n Bev yang menggabungkan **E-commerce Website**, **CMS Admin**, dan **Point of Sales (POS)** dalam satu platform terintegrasi.  
-Dibangun dengan arsitektur modern menggunakan **Next.js**, **AdonisJS**, dan **React (Vite)**.
+Abby n Bev Web Repository adalah ekosistem digital untuk E-commerce dan Transaksi secara Offline dari brand Abby n Bev yang menggabungkan **E-commerce Website**, **CMS Admin**, dan **Point of Sales (POS)** dalam satu platform terintegrasi. Dibangun dengan arsitektur modern menggunakan **Next.js**, **AdonisJS**, dan **React (Vite)**.
 
 ---
 
