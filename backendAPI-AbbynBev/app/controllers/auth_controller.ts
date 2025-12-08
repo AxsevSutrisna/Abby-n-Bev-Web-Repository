@@ -81,11 +81,7 @@ export default class AuthController {
   public async loginAdmin({ request, response }: HttpContext) {
     try {
       const { email, password } = request.only(['email', 'password'])
-      const user = await User.query()
-        .where('email', email)
-        .where('role', Role.ADMINISTRATOR)
-        .whereNull('deleted_at')
-        .first()
+      const user = await User.query().where('email', email).whereNull('deleted_at').first()
 
       if (!user) {
         return response.badRequest({

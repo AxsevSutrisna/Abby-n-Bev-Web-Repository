@@ -66,7 +66,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare isActive: number | null
 
   @column()
-  declare role: number | null
+  declare role: number
 
   @column({ columnName: 'photo_profile' })
   declare photoProfile: string | null
